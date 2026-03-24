@@ -386,8 +386,11 @@ const AIChatWidget = () => {
     setInputText('');
     setIsLoading(true);
 
-    const apiKey = "VITE_GEMINI_API_KEY=AIzaSyAQyKyB-gB2NAjS3B0qatmTHy0JgDb2yH8"; 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    // 注意：不要加双引号，直接用 import.meta.env 读取 Vercel 里的保险柜！
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
+
+// 顺便把模型换成最稳定极速的 1.5-flash
+const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const dynamicProjectContext = PROJECT_DATA.map(p => 
       `项目《${p.title}》：${p.overview}。核心发力点包含：${p.details.map(d => d.title).join('、')}。`
