@@ -376,14 +376,11 @@ const AIChatWidget = () => {
     setInputText('');
     setIsLoading(true);
 
-    // ⚠️ 极其重要：为了防止在线预览器报错，这里暂时留空。
-    // 当你在 VS Code 里准备提交部署到 Vercel 时，请务必把下面这行的注释双斜杠去掉，并删掉 const apiKey = ""; 这一行。
+    // ⚠️ 极其重要：为了防止在线预览器报错，这里只能暂时填空。
+    // 在你的 VS Code 里，务必把下面这行的双斜杠去掉，并删掉 const apiKey = ""; 这一行！
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     
     console.log("🔎 [诊断监控] 正在检查 API Key 是否加载成功: ", apiKey ? "✅ 已拿到钥匙！" : "❌ 钥匙为空！如果是本地测试请无视，如果是 Vercel 请检查环境变量。");
-
-    // 🔥 终极保底修复：换成 100% 所有账号都有权限的基础版 gemini-pro 模型
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
 
     const dynamicProjectContext = PROJECT_DATA.map(p => 
       `项目《${p.title}》：${p.overview}。核心发力点包含：${p.details.map(d => d.title).join('、')}。`
@@ -426,7 +423,6 @@ const AIChatWidget = () => {
     - 绝不生硬背诵，请结合上下文用大白话输出你的这些哲理，展现出你的从容、深度和真诚的反思能力。
     - 结尾时，礼貌且自信地引导面试官：“如果您想探讨更多细节，随时欢迎邮件联系我哦！xinyuchen1124@163.com ✨”`;
 
-    // 为了兼容 gemini-pro，我们将系统指令伪装成第一轮对话历史
     const formattedHistory = [
       { role: 'user', parts: [{ text: systemInstruction }] },
       { role: 'model', parts: [{ text: "收到！我是陈馨语的专属AI分身，我已经准备好随时回答用户的问题了。" }] }
@@ -444,20 +440,57 @@ const AIChatWidget = () => {
       contents: formattedHistory
     };
 
-    const fetchWithRetry = async (retries = 3, delay = 1000) => {
+    const fetchWithRetry = async (retries = 2, delay = 1000) => {
       try {
         if (!apiKey && typeof window === 'undefined') {
-          console.error("❌ 致命错误: API Key 为空！Vercel 打包时没有读取到 VITE_GEMINI_API_KEY。");
           throw new Error('No API Key');
         }
 
-        console.log("🚀 [诊断监控] 正在向 Google API 发送请求...");
-        const res = await fetch(url, {
+        // 1. 默认先尝试最流行的 gemini-1.5-flash
+        let targetModel = 'models/gemini-1.5-flash';
+        let url = `https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${apiKey}`;
+
+        console.log(`🚀 [诊断监控] 正在向 Google API 发送请求，首选模型：${targetModel}`);
+        let res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         
+        // 2. 🔥 【自动搜寻器】如果报 404（模型不存在），主动去查账号到底支持哪些模型！
+        if (res.status === 404) {
+          console.log("⚠️ [诊断监控] 默认模型遭拒 (404)，正在自动向 Google 查询你账号的真实可用模型...");
+          const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+          
+          if (listRes.ok) {
+            const listData = await listRes.json();
+            console.log("📋 [诊断监控] 查询成功！你的账号支持的全部模型如下:", listData);
+            
+            // 自动筛选第一个带 gemini 且支持文本生成的模型
+            const availableModel = listData.models?.find(m => 
+              m.supportedGenerationMethods?.includes('generateContent') && 
+              m.name.includes('gemini')
+            );
+            
+            if (availableModel) {
+              console.log(`✅ [诊断监控] 自动抢救成功！已为你切换到可用模型: ${availableModel.name}`);
+              targetModel = availableModel.name;
+              url = `https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${apiKey}`;
+              
+              // 拿着对的模型重新发一次请求
+              res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+            } else {
+              throw new Error("你的账号下未发现任何可用的 Gemini 文本模型权限！");
+            }
+          } else {
+            console.log("❌ [诊断监控] 查询模型列表也失败了！");
+          }
+        }
+
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({}));
           console.error("❌ [诊断监控] 糟糕！Google API 报错拒绝了请求:", res.status, errorData);
