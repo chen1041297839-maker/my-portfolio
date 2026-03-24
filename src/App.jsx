@@ -446,27 +446,57 @@ const AIChatWidget = () => {
           throw new Error('No API Key');
         }
 
-        // 🔥 终极保底修复：删掉花里胡哨的自动查询，直接锁死 100% 所有账号都有权限的基础版 gemini-pro 模型
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
-
-        console.log("🚀 [诊断监控] 正在向 Google API 发送请求，使用模型: gemini-pro");
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+        // 🔥 终极自动打通机制：挨个尝试目前所有已知的 Google 模型！
+        const fallbackModels = [
+          'gemini-2.0-flash',        // 2026年最新默认版
+          'gemini-1.5-flash',        // 经典高速版
+          'gemini-1.5-pro',          // 高级版
+          'gemini-1.0-pro',          // 老基础版
+          'gemini-2.5-flash',        // 预览版
+          'gemini-pro'               // 最早的别名
+        ];
         
-        if (!res.ok) {
-          const errorData = await res.json().catch(() => ({}));
-          console.error("❌ [诊断监控] 糟糕！Google API 报错拒绝了请求:", res.status, errorData);
-          throw new Error('API Request Error');
+        for (const model of fallbackModels) {
+          try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+            console.log(`🚀 [诊断监控] 正在尝试敲门，呼叫模型: ${model}...`);
+            
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            
+            if (res.status === 404) {
+              console.warn(`⚠️ [诊断监控] 模型 ${model} 敲门失败(404)，你的账号暂无此模型权限。正在火速切换下一个...`);
+              continue; // 核心：如果报404，直接跳过，试下一个！
+            }
+            
+            if (!res.ok) {
+              const errorData = await res.json().catch(() => ({}));
+              console.error(`❌ [诊断监控] 模型 ${model} 报错:`, res.status, errorData);
+              throw new Error('API Request Error');
+            }
+            
+            const data = await res.json();
+            console.log(`✅ [诊断监控] 敲门成功！为你接通的模型是: ${model} 🎉`);
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || "抱歉，我暂时无法回答这个问题。";
+            
+          } catch (error) {
+             if (error.message === 'API Request Error') {
+               // 如果是网络超时等其他问题，跳过继续试
+               console.error(`❌ [诊断监控] 请求模型 ${model} 时发生异常:`, error.message);
+             } else {
+               throw error;
+             }
+          }
         }
         
-        const data = await res.json();
-        console.log("✅ [诊断监控] 成功收到 AI 回复！");
-        return data.candidates?.[0]?.content?.parts?.[0]?.text || "抱歉，我暂时无法回答这个问题。";
+        // 如果把上面的所有模型都试了一遍还是全挂了：
+        return "抱歉，我尝试了所有的 AI 模型路线，但都没能走通。你可以直接通过邮箱(xinyuchen1124@163.com)联系我哦！";
+
       } catch (error) {
-        console.error("❌ [诊断监控] 请求过程中发生异常断开:", error.message);
+        console.error("❌ [诊断监控] 请求过程中发生严重异常:", error.message);
         if (retries > 0 && error.message !== 'No API Key') {
           console.log(`⏳ 正在重试，剩余 ${retries} 次...`);
           await new Promise(resolve => setTimeout(resolve, delay));
