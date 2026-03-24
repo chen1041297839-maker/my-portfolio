@@ -446,51 +446,16 @@ const AIChatWidget = () => {
           throw new Error('No API Key');
         }
 
-        // 1. 默认先尝试最流行的 gemini-1.5-flash
-        let targetModel = 'models/gemini-1.5-flash';
-        let url = `https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${apiKey}`;
+        // 🔥 终极保底修复：删掉花里胡哨的自动查询，直接锁死 100% 所有账号都有权限的基础版 gemini-pro 模型
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
 
-        console.log(`🚀 [诊断监控] 正在向 Google API 发送请求，首选模型：${targetModel}`);
-        let res = await fetch(url, {
+        console.log("🚀 [诊断监控] 正在向 Google API 发送请求，使用模型: gemini-pro");
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         
-        // 2. 🔥 【自动搜寻器】如果报 404（模型不存在），主动去查账号到底支持哪些模型！
-        if (res.status === 404) {
-          console.log("⚠️ [诊断监控] 默认模型遭拒 (404)，正在自动向 Google 查询你账号的真实可用模型...");
-          const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-          
-          if (listRes.ok) {
-            const listData = await listRes.json();
-            console.log("📋 [诊断监控] 查询成功！你的账号支持的全部模型如下:", listData);
-            
-            // 自动筛选第一个带 gemini 且支持文本生成的模型
-            const availableModel = listData.models?.find(m => 
-              m.supportedGenerationMethods?.includes('generateContent') && 
-              m.name.includes('gemini')
-            );
-            
-            if (availableModel) {
-              console.log(`✅ [诊断监控] 自动抢救成功！已为你切换到可用模型: ${availableModel.name}`);
-              targetModel = availableModel.name;
-              url = `https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${apiKey}`;
-              
-              // 拿着对的模型重新发一次请求
-              res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-              });
-            } else {
-              throw new Error("你的账号下未发现任何可用的 Gemini 文本模型权限！");
-            }
-          } else {
-            console.log("❌ [诊断监控] 查询模型列表也失败了！");
-          }
-        }
-
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({}));
           console.error("❌ [诊断监控] 糟糕！Google API 报错拒绝了请求:", res.status, errorData);
