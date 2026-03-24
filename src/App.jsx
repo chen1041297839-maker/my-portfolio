@@ -377,7 +377,7 @@ const AIChatWidget = () => {
   useEffect(() => {
     if (isOpen) scrollToBottom();
   }, [messages, isOpen]);
-
+ 
   const handleSend = async () => {
     if (!inputText.trim()) return;
 
@@ -386,7 +386,7 @@ const AIChatWidget = () => {
     setInputText('');
     setIsLoading(true);
 
-    const apiKey = ""; 
+    const apiKey = "VITE_GEMINI_API_KEY=AIzaSyAQyKyB-gB2NAjS3B0qatmTHy0JgDb2yH8"; 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
     const dynamicProjectContext = PROJECT_DATA.map(p => 
