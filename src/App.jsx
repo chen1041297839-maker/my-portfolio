@@ -391,9 +391,7 @@ const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     
     console.log("🔎 [诊断监控] 正在检查 API Key 是否加载成功: ", apiKey ? "✅ 已拿到钥匙！" : "❌ 钥匙为空！如果是本地测试请无视，如果是 Vercel 请检查环境变量。");
 
-    // 更换为全网最稳定的 Gemini 1.5 Flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
+     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
     const dynamicProjectContext = PROJECT_DATA.map(p => 
       `项目《${p.title}》：${p.overview}。核心发力点包含：${p.details.map(d => d.title).join('、')}。`
