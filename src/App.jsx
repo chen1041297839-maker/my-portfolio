@@ -382,8 +382,8 @@ const AIChatWidget = () => {
     
     console.log("🔎 [诊断监控] 正在检查 API Key 是否加载成功: ", apiKey ? "✅ 已拿到钥匙！" : "❌ 钥匙为空！如果是本地测试请无视，如果是 Vercel 请检查环境变量。");
 
-    // 🔥 终极修复：把模型名字改成全网最通用的官方正式稳定版，完美避开所有奇怪的 404
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // 🔥 终极保底修复：换成 100% 所有账号都有权限的基础版 gemini-pro 模型
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
 
     const dynamicProjectContext = PROJECT_DATA.map(p => 
       `项目《${p.title}》：${p.overview}。核心发力点包含：${p.details.map(d => d.title).join('、')}。`
@@ -426,15 +426,22 @@ const AIChatWidget = () => {
     - 绝不生硬背诵，请结合上下文用大白话输出你的这些哲理，展现出你的从容、深度和真诚的反思能力。
     - 结尾时，礼貌且自信地引导面试官：“如果您想探讨更多细节，随时欢迎邮件联系我哦！xinyuchen1124@163.com ✨”`;
 
-    const formattedHistory = messages.map(msg => ({
-      role: msg.role === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.text }]
-    }));
+    // 为了兼容 gemini-pro，我们将系统指令伪装成第一轮对话历史
+    const formattedHistory = [
+      { role: 'user', parts: [{ text: systemInstruction }] },
+      { role: 'model', parts: [{ text: "收到！我是陈馨语的专属AI分身，我已经准备好随时回答用户的问题了。" }] }
+    ];
+
+    messages.forEach(msg => {
+      formattedHistory.push({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.text }]
+      });
+    });
     formattedHistory.push({ role: 'user', parts: [{ text: userMsg.text }] });
 
     const payload = {
-      contents: formattedHistory,
-      systemInstruction: { parts: [{ text: systemInstruction }] }
+      contents: formattedHistory
     };
 
     const fetchWithRetry = async (retries = 3, delay = 1000) => {
