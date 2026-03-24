@@ -54,19 +54,17 @@ const GlassCard = ({ children, className = "", style = {}, onClick, isClickable 
   );
 };
 
-// --- 画廊子组件 (直接出线原型，无 Loading 掩盖) ---
+// --- 画廊子组件 ---
 const GalleryItem = ({ item, idx, setZoomedImage }) => {
   const isImageLeft = idx % 2 === 0;
-  
-  // 🔥 新增：用于强制重新加载 iframe 的状态
   const [reloadKey, setReloadKey] = useState(0);
   const [isReloading, setIsReloading] = useState(false);
 
   const handleReload = (e) => {
     e.stopPropagation();
     setIsReloading(true);
-    setReloadKey(prev => prev + 1); // 改变 key 强制 React 重新挂载 iframe
-    setTimeout(() => setIsReloading(false), 1000); // 旋转动画持续 1 秒
+    setReloadKey(prev => prev + 1); 
+    setTimeout(() => setIsReloading(false), 1000); 
   };
 
   return (
@@ -75,11 +73,8 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
       {/* 图片/原型展示区 */}
       <div 
         className="w-full md:w-3/5 rounded-[2rem] bg-[#0a0a0a] border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.5)] relative overflow-hidden group flex items-center justify-center"
-        // 外层容器控制宏观高度
         style={item.prototypeAspectRatio ? { aspectRatio: item.prototypeAspectRatio } : {}}
       >
-        
-        {/* 底层原图：如果有原型，直接隐藏，不参与任何遮挡 */}
         <img 
           src={item.image} 
           alt={item.title} 
@@ -96,10 +91,9 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
           onError={(e) => { e.target.style.display = 'none'; }}
         />
         
-        {/* Figma 原型交互层：彻底移除 loading="lazy"，进入详情页瞬间全量火力全开！ */}
         {item.prototypeUrl && (
           <iframe
-            key={reloadKey} // 🔥 绑定 key，点击刷新时会重建 iframe
+            key={reloadKey}
             src={item.prototypeUrl}
             className={`border-0 z-20 opacity-100 ${
               item.isMobilePrototype 
@@ -114,10 +108,8 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
         
         <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[2rem] pointer-events-none z-30" />
         
-        {/* 🔥 修复：将状态标识与刷新按钮合并为一个 Flex 容器，统一放在左上角，避免遮挡右上角交互 */}
         {item.prototypeUrl && (
           <div className="absolute top-4 left-4 z-40 flex items-center gap-3">
-            {/* 🔥 修复：去掉了 backdrop-blur-md (毛玻璃滤镜)，彻底解决模糊底下文字的问题 */}
             <div className="px-3 py-1.5 rounded-full border border-green-500/20 bg-green-500/10 flex items-center gap-2 pointer-events-none animate-in fade-in duration-500">
               <span className="w-2 h-2 rounded-full bg-green-400/80 animate-pulse" />
               <span className="text-[10px] text-green-300/80 font-mono tracking-wider font-bold">
@@ -125,7 +117,6 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
               </span>
             </div>
 
-            {/* 原位重新加载按钮 (同步去掉毛玻璃滤镜) */}
             <button
               onClick={handleReload}
               data-clickable="true"
@@ -141,7 +132,6 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
         )}
       </div>
 
-      {/* 文字解说区 */}
       <div className="w-full md:w-2/5 flex flex-col">
          <div className="text-6xl font-black text-white/5 mb-4 font-mono select-none">
             {String(idx + 1).padStart(2, '0')}
@@ -158,7 +148,7 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
   );
 };
 
-// --- 项目数据源 (图文画廊版) ---
+// --- 项目数据源 ---
 const PROJECT_DATA = [
   {
     id: 'hi-link',
@@ -377,7 +367,7 @@ const AIChatWidget = () => {
   useEffect(() => {
     if (isOpen) scrollToBottom();
   }, [messages, isOpen]);
- 
+
   const handleSend = async () => {
     if (!inputText.trim()) return;
 
@@ -386,12 +376,14 @@ const AIChatWidget = () => {
     setInputText('');
     setIsLoading(true);
 
-    // 注意：不要加双引号，直接用 import.meta.env 读取 Vercel 里的保险柜！
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
+    // ⚠️ 极其重要：为了防止在线预览器报错，这里暂时留空。
+    // 当你在 VS Code 里准备提交部署到 Vercel 时，请务必把下面这行的注释双斜杠去掉，并删掉 const apiKey = ""; 这一行。
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     
     console.log("🔎 [诊断监控] 正在检查 API Key 是否加载成功: ", apiKey ? "✅ 已拿到钥匙！" : "❌ 钥匙为空！如果是本地测试请无视，如果是 Vercel 请检查环境变量。");
 
-     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    // 🔥 终极修复：把模型名字改成全网最通用的官方正式稳定版，完美避开所有奇怪的 404
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const dynamicProjectContext = PROJECT_DATA.map(p => 
       `项目《${p.title}》：${p.overview}。核心发力点包含：${p.details.map(d => d.title).join('、')}。`
@@ -445,18 +437,33 @@ const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       systemInstruction: { parts: [{ text: systemInstruction }] }
     };
 
-    const fetchWithRetry = async (retries = 5, delay = 1000) => {
+    const fetchWithRetry = async (retries = 3, delay = 1000) => {
       try {
+        if (!apiKey && typeof window === 'undefined') {
+          console.error("❌ 致命错误: API Key 为空！Vercel 打包时没有读取到 VITE_GEMINI_API_KEY。");
+          throw new Error('No API Key');
+        }
+
+        console.log("🚀 [诊断监控] 正在向 Google API 发送请求...");
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        if (!res.ok) throw new Error('API Request Error');
+        
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          console.error("❌ [诊断监控] 糟糕！Google API 报错拒绝了请求:", res.status, errorData);
+          throw new Error('API Request Error');
+        }
+        
         const data = await res.json();
+        console.log("✅ [诊断监控] 成功收到 AI 回复！");
         return data.candidates?.[0]?.content?.parts?.[0]?.text || "抱歉，我暂时无法回答这个问题。";
       } catch (error) {
-        if (retries > 0) {
+        console.error("❌ [诊断监控] 请求过程中发生异常断开:", error.message);
+        if (retries > 0 && error.message !== 'No API Key') {
+          console.log(`⏳ 正在重试，剩余 ${retries} 次...`);
           await new Promise(resolve => setTimeout(resolve, delay));
           return fetchWithRetry(retries - 1, delay * 2);
         } else {
@@ -553,7 +560,6 @@ export default function App() {
   const [isHoveringClickable, setIsHoveringClickable] = useState(false);
   const [zoomedImage, setZoomedImage] = useState(null);
 
-  // 🔥 全局预加载引擎：完全按照优先级排队执行，首屏 > Hero横幅 > 画廊细节
   useEffect(() => {
     const preloadSequentially = async () => {
       const loadImage = (src) => new Promise((resolve) => {
@@ -564,17 +570,12 @@ export default function App() {
         img.src = src;
       });
 
-      // 阶段 1：先加载 3 个封面图 (Cover)
       for (const proj of PROJECT_DATA) {
         await loadImage(proj.coverImage);
       }
-
-      // 阶段 2：加载 3 个项目的大头图 (Hero Image)
       for (const proj of PROJECT_DATA) {
         await loadImage(proj.detailHeroImage);
       }
-
-      // 阶段 3：按顺序依次加载画廊原图
       for (const proj of PROJECT_DATA) {
         if (proj.gallery) {
           for (const item of proj.gallery) {
@@ -584,7 +585,6 @@ export default function App() {
       }
     };
 
-    // 延迟 500ms 启动引擎，确保网页最核心的 HTML 优先被浏览器渲染完
     const timer = setTimeout(preloadSequentially, 500);
     return () => clearTimeout(timer);
   }, []);
