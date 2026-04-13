@@ -759,7 +759,7 @@ export default function App() {
             XINYU<span className="text-cyan-500">.</span>
           </div>
           <div className={`hidden md:flex gap-10 px-10 py-3.5 rounded-full border border-white/10 transition-all duration-500 ${scrollY > 50 ? 'bg-black/50 backdrop-blur-2xl shadow-2xl' : 'bg-white/[0.03] backdrop-blur-md'}`}>
-            {['关于', '经历', '项目', '技能'].map((item) => (
+            {['关于', '项目', '经历', '技能'].map((item) => (
               <a data-clickable="true" key={item} href={`#${item}`} className="text-sm md:text-base font-medium tracking-widest text-white/70 hover:text-white hover:scale-110 transition-all">
                 {item}
               </a>
