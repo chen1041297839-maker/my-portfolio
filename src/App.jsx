@@ -102,7 +102,7 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
             }`}
             style={item.isMobilePrototype ? { left: '50%', transform: 'translateX(-50%)' } : {}}
             allowFullScreen
-            scrolling="no"
+            scrolling="yes"
           />
         )}
         
@@ -113,7 +113,7 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
             <div className="px-3 py-1.5 rounded-full border border-green-500/20 bg-green-500/10 flex items-center gap-2 pointer-events-none animate-in fade-in duration-500">
               <span className="w-2 h-2 rounded-full bg-green-400/80 animate-pulse" />
               <span className="text-[10px] text-green-300/80 font-mono tracking-wider font-bold">
-                PROTOTYPE
+                LIVE WEB
               </span>
             </div>
 
@@ -142,21 +142,138 @@ const GalleryItem = ({ item, idx, setZoomedImage }) => {
          <p className="text-lg text-white/60 leading-relaxed font-light">
             {item.desc}
          </p>
+         {/* 外跳链接展示 */}
+         {item.linkUrl && (
+           <a 
+             href={item.linkUrl} 
+             target="_blank" 
+             rel="noreferrer"
+             data-clickable="true"
+             className="mt-6 inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-mono text-sm tracking-widest transition-colors w-fit border-b border-cyan-400/30 hover:border-cyan-300 pb-1"
+           >
+             Visit Live Site
+             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+           </a>
+         )}
       </div>
 
     </div>
   );
 };
 
-// --- 项目数据源 ---
+// --- 项目分类与数据源 (共12个项目) ---
+const CATEGORIES = ['All', 'UX/UI & Web', 'Game Design', 'Digital Media', 'Spatial Design'];
+
+// 使用 Tailwind 安全的颜色配置，防止被打包清除
+const THEME = {
+  cyan: { text: 'text-cyan-400', hoverText: 'group-hover:text-cyan-400', badge: 'border-cyan-500/40 bg-cyan-500/10 text-cyan-400' },
+  purple: { text: 'text-purple-400', hoverText: 'group-hover:text-purple-400', badge: 'border-purple-500/40 bg-purple-500/10 text-purple-400' },
+  blue: { text: 'text-blue-400', hoverText: 'group-hover:text-blue-400', badge: 'border-blue-500/40 bg-blue-500/10 text-blue-400' },
+  orange: { text: 'text-orange-400', hoverText: 'group-hover:text-orange-400', badge: 'border-orange-500/40 bg-orange-500/10 text-orange-400' },
+  green: { text: 'text-green-400', hoverText: 'group-hover:text-green-400', badge: 'border-green-500/40 bg-green-500/10 text-green-400' },
+  pink: { text: 'text-pink-400', hoverText: 'group-hover:text-pink-400', badge: 'border-pink-500/40 bg-pink-500/10 text-pink-400' },
+  yellow: { text: 'text-yellow-400', hoverText: 'group-hover:text-yellow-400', badge: 'border-yellow-500/40 bg-yellow-500/10 text-yellow-400' },
+  emerald: { text: 'text-emerald-400', hoverText: 'group-hover:text-emerald-400', badge: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400' }
+};
+
+// 全新的动态卡片按钮霓虹主题系统
+const BTN_THEMES = {
+  cyan: {
+    border: 'hover:border-cyan-500/40',
+    cardShadow: 'hover:shadow-[0_0_50px_rgba(34,211,238,0.15)]',
+    bgRadial: 'bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.08)_0%,transparent_60%)]',
+    bgConic: 'bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,rgba(34,211,238,0.15)_25%,rgba(20,184,166,0.15)_50%,transparent_100%)]',
+    textGradient: 'group-hover:from-cyan-400 group-hover:via-teal-400 group-hover:to-emerald-500',
+    btnGradient: 'from-cyan-400 via-teal-400 to-emerald-500',
+    btnShadow: 'hover:shadow-[0_0_60px_rgba(34,211,238,0.5)]',
+    tagBg: 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300',
+    tagDot: 'bg-cyan-400',
+    tagPing: 'bg-cyan-500'
+  },
+  purple: {
+    border: 'hover:border-purple-500/40',
+    cardShadow: 'hover:shadow-[0_0_50px_rgba(168,85,247,0.15)]',
+    bgRadial: 'bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.08)_0%,transparent_60%)]',
+    bgConic: 'bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,rgba(168,85,247,0.15)_25%,rgba(99,102,241,0.15)_50%,transparent_100%)]',
+    textGradient: 'group-hover:from-purple-400 group-hover:via-fuchsia-400 group-hover:to-indigo-500',
+    btnGradient: 'from-purple-400 via-fuchsia-400 to-indigo-500',
+    btnShadow: 'hover:shadow-[0_0_60px_rgba(168,85,247,0.5)]',
+    tagBg: 'bg-purple-500/10 border-purple-500/30 text-purple-300',
+    tagDot: 'bg-purple-400',
+    tagPing: 'bg-purple-500'
+  },
+  red: {
+    border: 'hover:border-red-500/40',
+    cardShadow: 'hover:shadow-[0_0_50px_rgba(239,68,68,0.15)]',
+    bgRadial: 'bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.08)_0%,transparent_60%)]',
+    bgConic: 'bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,rgba(239,68,68,0.15)_25%,rgba(244,63,94,0.15)_50%,transparent_100%)]',
+    textGradient: 'group-hover:from-red-400 group-hover:via-rose-400 group-hover:to-orange-500',
+    btnGradient: 'from-red-400 via-rose-400 to-orange-500',
+    btnShadow: 'hover:shadow-[0_0_60px_rgba(239,68,68,0.5)]',
+    tagBg: 'bg-red-500/10 border-red-500/30 text-red-300',
+    tagDot: 'bg-red-400',
+    tagPing: 'bg-red-500'
+  },
+  fuchsia: {
+    border: 'hover:border-fuchsia-500/40',
+    cardShadow: 'hover:shadow-[0_0_50px_rgba(217,70,239,0.15)]',
+    bgRadial: 'bg-[radial-gradient(circle_at_center,rgba(217,70,239,0.08)_0%,transparent_60%)]',
+    bgConic: 'bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,rgba(217,70,239,0.15)_25%,rgba(244,63,94,0.15)_50%,transparent_100%)]',
+    textGradient: 'group-hover:from-fuchsia-400 group-hover:via-rose-400 group-hover:to-pink-500',
+    btnGradient: 'from-fuchsia-400 via-rose-400 to-pink-500',
+    btnShadow: 'hover:shadow-[0_0_60px_rgba(217,70,239,0.5)]',
+    tagBg: 'bg-fuchsia-500/10 border-fuchsia-500/30 text-fuchsia-300',
+    tagDot: 'bg-fuchsia-400',
+    tagPing: 'bg-fuchsia-500'
+  },
+  blue: {
+    border: 'hover:border-blue-500/40',
+    cardShadow: 'hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]',
+    bgRadial: 'bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.08)_0%,transparent_60%)]',
+    bgConic: 'bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,rgba(59,130,246,0.15)_25%,rgba(6,182,212,0.15)_50%,transparent_100%)]',
+    textGradient: 'group-hover:from-blue-400 group-hover:via-cyan-400 group-hover:to-indigo-500',
+    btnGradient: 'from-blue-400 via-cyan-400 to-indigo-500',
+    btnShadow: 'hover:shadow-[0_0_60px_rgba(59,130,246,0.5)]',
+    tagBg: 'bg-blue-500/10 border-blue-500/30 text-blue-300',
+    tagDot: 'bg-blue-400',
+    tagPing: 'bg-blue-500'
+  },
+  green: {
+    border: 'hover:border-green-500/40',
+    cardShadow: 'hover:shadow-[0_0_50px_rgba(34,197,94,0.15)]',
+    bgRadial: 'bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.08)_0%,transparent_60%)]',
+    bgConic: 'bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,rgba(34,197,94,0.15)_25%,rgba(16,185,129,0.15)_50%,transparent_100%)]',
+    textGradient: 'group-hover:from-green-400 group-hover:via-emerald-400 group-hover:to-teal-500',
+    btnGradient: 'from-green-400 via-emerald-400 to-teal-500',
+    btnShadow: 'hover:shadow-[0_0_60px_rgba(34,197,94,0.5)]',
+    tagBg: 'bg-green-500/10 border-green-500/30 text-green-300',
+    tagDot: 'bg-green-400',
+    tagPing: 'bg-green-500'
+  },
+  pink: {
+    border: 'hover:border-pink-500/40',
+    cardShadow: 'hover:shadow-[0_0_50px_rgba(236,72,153,0.15)]',
+    bgRadial: 'bg-[radial-gradient(circle_at_center,rgba(236,72,153,0.08)_0%,transparent_60%)]',
+    bgConic: 'bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,rgba(236,72,153,0.15)_25%,rgba(168,85,247,0.15)_50%,transparent_100%)]',
+    textGradient: 'group-hover:from-pink-400 group-hover:via-purple-400 group-hover:to-indigo-500',
+    btnGradient: 'from-pink-400 via-purple-400 to-indigo-500',
+    btnShadow: 'hover:shadow-[0_0_60px_rgba(236,72,153,0.5)]',
+    tagBg: 'bg-pink-500/10 border-pink-500/30 text-pink-300',
+    tagDot: 'bg-pink-400',
+    tagPing: 'bg-pink-500'
+  }
+};
+
 const PROJECT_DATA = [
+  // 1. HI链接解析
   {
     id: 'hi-link',
     category: '01 / B端体验设计',
     title: 'Hi 链接解析',
     subtitle: 'IM 场景下的高效信息触达解决方案',
     tags: ['界面强关联', '实时沙箱渲染', '风险控制'],
-    color: 'cyan',
+    theme: THEME.cyan,
+    btnTheme: 'cyan',
     coverImage: 'https://i.ibb.co/QvJgsncJ/Frame-50.png',
     detailHeroImage: 'https://i.ibb.co/LzcFjcqh/1.png',
     overview: '在复杂的即时通讯场景中，帮助开发者与业务方更安全、清晰、高效地触达关键信息。覆盖了沉浸式预览、视觉风险控制与全链路审批体验的状态优化。',
@@ -207,13 +324,15 @@ const PROJECT_DATA = [
       }
     ]
   },
+  // 2. 待办薯 AI协作
   {
     id: 'todo-ai',
     category: '02 / B端 AI 交互设计',
     title: '待办薯 AI协作',
     subtitle: 'IM场景下的智能协作效率助手',
     tags: ['Thinking动效', '模块化配置', '上下文记忆'],
-    color: 'purple',
+    theme: THEME.purple,
+    btnTheme: 'purple',
     coverImage: 'https://i.ibb.co/ksW4BhDH/Frame-51.png',
     detailHeroImage: 'https://i.ibb.co/V034xxZG/15-1.png',
     overview: '探索大语言模型在 B 端工作流中的无缝融入，降低员工的使用门槛，提升协同效率。包含拟人化状态响应与上下文连贯性设计。',
@@ -277,13 +396,15 @@ const PROJECT_DATA = [
       }
     ]
   },
+  // 3. 包的AI 小程序
   {
     id: 'bao-ai',
     category: '03 / C端应用设计',
     title: '包的AI 小程序',
     subtitle: '让图像创作更轻松，更愉快的被分享',
     tags: ['视觉重塑', '一键做同款', '增长留存'],
-    color: 'blue',
+    theme: THEME.blue,
+    btnTheme: 'blue',
     coverImage: 'https://i.ibb.co/KcWNvTYW/Frame-52.png',
     detailHeroImage: 'https://i.ibb.co/3YcsYmWt/1.png',
     overview: '一款面向 C 端年轻用户的 AI 图像创作应用，旨在打造极简的生成流程与高转化的社交分享闭环。',
@@ -303,6 +424,220 @@ const PROJECT_DATA = [
       { image: 'https://i.ibb.co/B51rzXbg/2-1.png', title: '创作者管理体系', desc: '建立完善的创作者资产体系，用户可以在个人主页清晰地管理已生成的图像与收藏的灵感。通过数据面板的可视化，赋予创作者成就感，提升产品的长期留存率。' }, 
       { image: 'https://i.ibb.co/5WwMXG0G/image.png', title: '会员感知', desc: '在免费体验与高级功能之间建立平滑的过渡。通过精美的特权图标、专属的高级风格滤镜以及柔和的引导弹窗，在不影响基础体验的前提下，提升会员用户的尊享感与转化率。' }, 
       { image: 'https://i.ibb.co/PsVQ0xV2/image.png', title: '品牌塑造', desc: '结合目标受众的审美偏好，提炼出年轻、前卫且富有科技感的品牌视觉语言。通过全局一致的色彩系统、圆角规范与微动效，塑造出独特且极具辨识度的产品DNA。' }  
+    ]
+  },
+  // 4. Catlaxy
+  {
+    id: 'catlaxy',
+    category: 'UX/UI & Web',
+    title: 'Catlaxy',
+    subtitle: '关注“我的猫”的宠物健康结构化学习路径',
+    tags: ['模块化学习', '反馈闭环', '降低门槛', 'Web Design'],
+    theme: THEME.purple,
+    btnTheme: 'purple',
+    coverImage: 'https://i.ibb.co/QjhxxgW6/Frame-53.png',
+    detailHeroImage: 'https://i.ibb.co/kVgYqtSY/20250502171011.png',
+    overview: '在真实的养猫过程中，许多宠物主人并不缺乏信息渠道，而是缺乏结构清晰、能够与自己猫咪情况对应的解决方案。本项目旨在构建一套围绕猫咪状态展开的模块化学习路径，通过“信息录入→内容吸收→反馈验证”的闭环体验，提升学习效率与参与动机。',
+    details: [
+      { title: '业务理解与问题聚焦', desc: '通过调研发现痛点在于“信息混乱、没有引导、缺乏参与感”。针对此，设计了降低初学者信息筛选负担、以猫咪状态为起点的强关联模块化分步体验。' },
+      { title: '互动与反馈机制设计', desc: '设计“输入猫咪信息 -> 获得专属建议 -> 学习模块 -> 测试反馈”的用户流。通过测验机制，帮助用户形成知识记忆并检验掌握情况。' }
+    ],
+    gallery: [
+      { image: 'https://i.ibb.co/sv3WB1x0/4-1.png', title: '信息架构与用户流', desc: '清晰定义了从信息录入、专属结果建议、模块化学习到测试反馈的全链路流程，确保用户不迷失。' },
+      { image: 'https://i.ibb.co/Df9k4Yfg/3-1-1.png', title: '核心页面交互展示', desc: '通过直观的状态卡片、趣味性的交互组件与进度引导，极大地降低了新手学习过程中的认知门槛。' },
+      { image: 'https://i.ibb.co/HL4pgqt1/1-577-1.png', title: '视觉风格与手绘元素', desc: '大量采用亲和力极强的手绘风格插画，建立品牌温度，有效缓解学习枯燥感，增强与用户的共情。' },
+      { image: 'https://i.ibb.co/d0GXZZ0M/2-1-2.png', title: '猫咪状态反馈机制', desc: '结合不同学习模块的完成度，设计了猫咪不同状态的视觉反馈，提升了用户的参与感与成就感。' }
+    ]
+  },
+  // 5. Lotus Echoes
+  {
+    id: 'lotus-echoes',
+    category: 'Game Design',
+    title: 'Lotus Echoes',
+    subtitle: '基于个人记忆构建的第一人称沉浸式体验',
+    tags: ['第一人称', '情绪叙事', '互动解谜'],
+    theme: THEME.emerald,
+    btnTheme: 'cyan',
+    coverImage: 'https://i.ibb.co/KptR7T2m/Frame-54.png',
+    detailHeroImage: 'https://i.ibb.co/DfbfvcsW/8.jpg',
+    videoUrl: 'https://www.youtube.com/embed/z_pD_47LzsQ',
+    overview: '创作灵感源于童年湖边采莲的场景。项目通过构建一个抽象虚构的“莲塘空间”，引导用户在互动中体验“时间流动”与“情感的消逝”。玩家以第一视角进入虚拟空间，通过采莲动作与环境互动，逐步唤醒关于亲人与失去的情绪感知。',
+    details: [
+      { title: '空间记忆与光影推进', desc: '光不仅用于导览，更用于组织时间感与情绪感。从清晨初入的明亮，到午后采摘的温暖，最终到黄昏暗光的回望阶段，光影变化与情绪流线完美契合。' },
+      { title: '碎片叙事交互系统', desc: '每一次采摘莲蓬的互动都会唤醒一段碎片记忆，随着莲子被放入篮中，光效变暗，完整展现成长与离散的线性情感。' }
+    ],
+    gallery: [
+      { image: 'https://i.ibb.co/mCpGT3cD/7-1.png', title: '故事版与核心叙事', desc: '采莲行为路径逻辑图和记忆碎片叙事图。通过将玩家行为与记忆唤醒深度绑定，构建出完整且感人的情感故事版。' },
+      { image: 'https://i.ibb.co/pvZFZx1X/5-2.png', title: '交互逻辑设计', desc: '清晰梳理了玩家在空间中的探索闭环与反馈机制，将抽象的思念情绪转化为具象的寻找、采摘与收集等交互行为。' },
+      { image: 'https://i.ibb.co/CsQSN7BW/6-1.png', title: '光影机制系统', desc: '光不仅用于场景物理空间的导览，更是组织时间和情绪的核心线索。随着交互的深入，光影逐渐变暗，与情感的流逝完美契合。' },
+      { image: 'https://i.ibb.co/p6B7LtfJ/5-1.png', title: '场景关键帧', desc: '展示游戏内核心场景的视觉状态演变，呈现出第一人称视角下充满迷雾感与未知感的沉浸式探索体验。' },
+      { image: 'https://i.ibb.co/0pQWkPQx/6-2.png', title: '手绘素材与视觉语言', desc: '大量运用手绘线稿与自然水彩质感的 UI 及场景素材，柔化视觉边缘，有效提升了空间叙事的温情与代入感。' }
+    ]
+  },
+  // 6. Echolens
+  {
+    id: 'echolens',
+    category: 'Spatial Design',
+    title: 'EchoLens',
+    subtitle: '一场用耳朵穿越城市记忆的虚拟旅程',
+    tags: ['Unreal Engine', 'VR 空间音频', '感官叙事'],
+    theme: THEME.blue,
+    btnTheme: 'purple',
+    coverImage: 'https://i.ibb.co/fVPX6W7G/Frame-55.png',
+    detailHeroImage: 'https://i.ibb.co/BVzR2J2c/11.jpg',
+    videoUrl: 'https://www.youtube.com/embed/eD3-I1WCV94?rel=0',
+    overview: '在日常城市中，声音作为记忆的载体常被视觉掩盖。本项目试图打破 VR 场景中视觉主导的交互惯性，重新确立“声音在空间中的功能性地位”。借助 Unreal Engine 构建了一座可导航的虚拟城市，引导玩家闭上眼睛，仅凭空间音频定位方向、感知情绪，完成一场纯粹的听觉内向探索。',
+    details: [
+      { title: '声音主导的结构式探索', desc: '将声音从背景氛围提升为路径标识与选择机制。玩家不再依赖地图和视觉找路，而是通过辨识情景型、互动型与记忆型三类声音，跟随情绪节奏在空间中游走。' },
+      { title: '四城叠加的记忆图谱', desc: '设计了 White、Stone、Medieval、Modern 四个具有不同声学特征与光影质感的城市阶段。从空灵的自然声到喧嚣的工业轰鸣，构建出层层递进的听觉记忆拼图。' }
+    ],
+    gallery: [
+      { image: 'https://i.ibb.co/gbtbL76r/12.jpg', title: '四阶段城市体验与声音机制', desc: '将城市分为 White, Stone, Medieval, Modern 四个阶段，每个阶段拥有独特的声学特征与光影质感，构建层层递进的听觉记忆拼图。' },
+      { image: 'https://i.ibb.co/8LNJy7tP/14.jpg', title: '视觉语言与光影策略', desc: '以低饱和、强导向性的视觉风格辅助听觉。色彩随城市阶段推进而递进，光影配合声音进行节奏引导，形成视听维度的通感互文。' },
+      { image: 'https://i.ibb.co/cSJQmcXW/13-1.png', title: '用户交互与系统闭环', desc: '建立“注视街道环境 -> 发现声音残影 -> 解锁碎片片段”的互动回路。UI 视效极简，反馈音效设计克制，最大化保护听觉主导的沉浸体验。' }
+    ]
+  },
+  // 7. Top Fax Review
+  {
+    id: 'top-fax-review',
+    category: 'UX/UI & Web',
+    title: 'Top Fax Review',
+    subtitle: '商业化评测平台的 UX/UI 体验重构',
+    tags: ['商业转化', 'UX/UI设计', '信息架构'],
+    theme: THEME.cyan,
+    btnTheme: 'purple',
+    coverImage: 'https://i.ibb.co/vMsVFHG/Frame-56.png',
+    detailHeroImage: 'https://i.ibb.co/gLJth3mS/1.png',
+    liveSiteUrl: 'https://topfaxreview.com',
+    overview: 'Top Fax Review (topfaxreview.com) 是一个已成功上线的商业评测网站。我在该项目中主导了核心的 UX/UI 设计与体验重构工作。通过梳理复杂的产品数据，建立清晰的信息架构与多维度的对比分析流，帮助企业与个人用户快速筛选出最适合的在线传真服务，聚焦于提升整个平台的商业点击转化率。',
+    details: [
+      { title: '商业化驱动的设计策略', desc: '设计聚焦于核心转化链路，精简用户决策路径。通过直观的对比表格、可视化的评分系统和高亮清晰的 CTA (Call to Action) 按钮，有效降低了用户的阅读成本，提升了站内的点击率与最终转化。' },
+      { title: '跨部门协作与高质量交付', desc: '产出包含完整状态流的高保真设计稿与响应式组件规范。在开发阶段，与前后端工程师紧密配合，跟进视觉还原度与多端适配细节，确保设计方案在线上环境中实现无损落地。' }
+    ],
+    gallery: []
+  },
+  // 8. Kingdom of Dreams
+  {
+    id: 'kingdom-of-dreams',
+    category: 'Digital Media',
+    title: 'Kingdom of Dreams',
+    subtitle: '探讨当代女大学生困境的批判性影像空间',
+    tags: ['场景建模', '视频影像', '批判性设计'],
+    theme: THEME.pink,
+    btnTheme: 'red',
+    coverImage: 'https://i.ibb.co/gZrK9vM7/Frame-57.png',
+    detailHeroImage: 'https://i.ibb.co/HTYxt864/CCI1-1.png',
+    videoUrl: 'https://www.youtube.com/embed/I2gMDWnodGk?rel=0',
+    overview: '针对当代大学生群体的社会痛点，构建了一个由无尽楼梯和密闭空间组成的虚拟“信息茧房”。通过视觉影像的隐喻，展现女性在社会压力、文化期望下的心理挣扎与个体自由的逐渐迷失。',
+    details: [
+      { title: '空间隐喻设计', desc: '采用倒置的楼梯和无出口的门构建场景，象征着女性在复杂的社会关系中面临的无形规训与无法逃离的刻板印象。' },
+      { title: '心理阶段可视化', desc: '将进入信息茧房后的迷茫、逃避、沉沦到最终被环境同化的复杂心理过程，转化为具象的场景动画与红粉色调的材质渲染，强化视觉压迫感。' }
+    ],
+    gallery: [
+      { image: 'https://i.ibb.co/b58fHtp9/CCI1-2.png', title: '概念推导与社会观察', desc: '以当代女大学生的社会困境为切入点，提取“无尽楼梯”与“密闭房间”作为核心视觉符号，隐喻社会规训与信息茧房。' },
+      { image: 'https://i.ibb.co/JjNKSV7c/CCI2.jpg', title: '调研分析', desc: '深入剖析女性在隐形社会压力下的心理困境，为视觉表达提供可靠的理论支撑与数据参考。' },
+      { image: 'https://i.ibb.co/ZRHRcv6j/CCI3-1.png', title: '故事版', desc: '通过分镜图梳理无尽楼梯的探索动线，规划视觉隐喻与压迫感，确立影像的镜头叙事逻辑。' },
+      { image: 'https://i.ibb.co/nMQz7gt4/CCI3-2.png', title: '贴图和动作的设计', desc: '结合场景语境，设计了极具隐喻性质的肌理贴图，并为角色配置挣扎与下坠的动态骨骼动画，强化情感表现。' },
+      { image: 'https://i.ibb.co/C5jqsJbB/CCI4-1.png', title: '场景、声音、元素的设计', desc: '将迷宫空间、红色心形元素与沉闷压抑的声效无缝整合，构造出一个全方位窒息的视听牢笼。' },
+      { image: 'https://i.ibb.co/84t48YKT/CCI5.jpg', title: '最终影像呈现与反思', desc: '项目最终以沉浸式影像的形式呈现，伴随压抑的背景音效，引发观众对当代女性生存空间与精神自由的深度共鸣。' }
+    ]
+  },
+  // 9. E-Dentity Gateway
+  {
+    id: 'e-dentity',
+    category: 'Digital Media',
+    title: 'E-Dentity Gateway',
+    subtitle: '基于粒子演化的交互式数字校园之门',
+    tags: ['TouchDesigner', 'Grasshopper', '生成艺术'],
+    theme: THEME.cyan,
+    btnTheme: 'fuchsia',
+    coverImage: 'https://i.ibb.co/MDDG1gNK/Frame-58.png',
+    detailHeroImage: 'https://i.ibb.co/1tCdTp73/CCI6-1.png',
+    videoUrl: 'https://www.youtube.com/embed/YejRvjvjGjc?rel=0',
+    overview: '突破传统实体校门的物理边界，利用 TouchDesigner 和 Grasshopper 实时生成独特的虚拟数字之门。结合学生的个性化数据与探索轨迹，生成动态变化的流体粒子效果，赋予空间全新的情感连接与身份认同。',
+    details: [
+      { title: '参数化粒子演化 (GH+TD)', desc: '利用算法阵列控制粒子的聚散与重构，每一颗粒子都象征着学生在大学期间知识的累积、社交的建立与自我形态的不断演化。' },
+      { title: '个人学术轨迹映射', desc: '虚拟校园屏幕上的每一扇门都是实时生成的数字艺术品。它根据用户的交互数据动态改变形状与粒子特效，将无形的个人学术旅程可视化。' }
+    ],
+    gallery: [
+      { image: 'https://i.ibb.co/svkDT4Cf/CCI6-2.png', title: '数字校园之门：概念起源', desc: '打破传统物理校门的静态界限，探讨生成艺术与数字媒体如何重新定义校园物理场所的认同感与情感连接。' },
+      { image: 'https://i.ibb.co/FqxP0L9k/CCI7-3.png', title: '调研分析', desc: '系统研究了大学生的行迹数据与校园情感联系，寻找在物理建筑上进行虚拟数字叠加的最优方案。' },
+      { image: 'https://i.ibb.co/nS6y2DY/CCI7-4.png', title: '用户旅程图和投影设计', desc: '推演学生从接近校门到穿行的全时空旅程，并设计了能与现实建筑光影完美融合的巨幅投影映射方案。' },
+      { image: 'https://i.ibb.co/xKH1kkhW/CCI8.jpg', title: '参数化建模和逻辑演算', desc: '通过 Grasshopper 设定三维力学边界和生成矩阵，将学生的数据转化为底层空间粒子演算的精确参数。' },
+      { image: 'https://i.ibb.co/ZRk6RzYH/CCI9.jpg', title: 'TouchDesigner生成', desc: '引入 TouchDesigner 节点网络完成实时的流体物理场解算，使粒子随着人群的交互行为呈现动态呼吸感。' },
+      { image: 'https://i.ibb.co/kgGWn0FQ/CCI10.jpg', title: '跨维度空间落地呈现', desc: '最终的生成视觉与环境空间完美融合，在真实场景中构建了一个充满未来感、连接虚拟与现实的赛博校园入口。' }
+    ]
+  },
+  // 10. Grand Pro Max
+  {
+    id: 'grand-pro-max',
+    category: 'Digital Media',
+    title: 'Grand Pro Max',
+    subtitle: '关注隔代教养的智能适老化辅具硬件',
+    tags: ['Arduino', '硬件原型', '物理计算'],
+    theme: THEME.yellow,
+    btnTheme: 'blue',
+    coverImage: 'https://i.ibb.co/XZgCrNSt/Frame-59.png',
+    detailHeroImage: 'https://i.ibb.co/q3FZcQRB/CCI11-1.png',
+    videoUrl: 'https://www.youtube.com/embed/TeK3Oy5145Y?rel=0',
+    overview: '聚焦当代社会“隔代育儿”现象中老年人的真实痛点，设计了智能发声学习辅具 (EASETALKERS) 与风力助行器 (WINDWALKERS)。结合硬件物理计算与参数化结构，在提供物理便利的同时，为老年人搭建了跨代沟通的情感桥梁。',
+    details: [
+      { title: '智能语音识别与震动反馈', desc: '内置麦克风与 Arduino 控制板实时识别英文发音准确度。当发音错误时，通过颈部的硬件振动马达产生轻柔震动，实现听觉与触觉的多感官学习反馈。' },
+      { title: '人机工学模块化结构', desc: '针对老年人群的生理特征，设计了可多角度调节的穿戴式结构，完美贴合不同用户的颈部曲线，确保长时间佩戴的舒适性。' }
+    ],
+    gallery: [
+      { image: 'https://i.ibb.co/nN8mgNdW/CCI11-2.png', title: '社会痛点与老龄化洞察', desc: '聚焦当代社会“隔代育儿”现象，洞察到老年人在辅助孙辈学习英语时因发音不准产生的自卑感与沟通障碍，以此作为设计的核心切入点。' },
+      { image: 'https://i.ibb.co/VYvf7Fft/CCI12.jpg', title: '调研与分析', desc: '深入访谈隔代家庭，精准提取老人在言语沟通和陪护出行两大场景中的真实痛点，形成核心产品切入方向。' },
+      { image: 'https://i.ibb.co/qLFDFRGW/CCI13.jpg', title: 'WINDWALKERS：风力助行器', desc: '配套的户外出行辅具。通过风速与重力感应模块，在提供基础物理支撑的同时，将自然风力转化为交互反馈，增强老人带娃出行的趣味性。' },
+      { image: 'https://i.ibb.co/7xnzCrHZ/CCI14.jpg', title: '适老化人体工学与结构验证', desc: '充分考虑老年群体的生理与骨骼特征，采用参数化生成的轻量级网格结构与亲肤材质，确保长期穿戴的舒适度与安全性。' }
+    ]
+  },
+  // 11. Echo Harmony
+  {
+    id: 'echo-harmony',
+    category: 'Digital Media',
+    title: 'Echo Harmony',
+    subtitle: '转化植物生物电的红树林声景交互装置',
+    tags: ['生物电信号', '环境声学', 'Ableton'],
+    theme: THEME.green,
+    btnTheme: 'green',
+    coverImage: 'https://i.ibb.co/B2BdvbzW/Frame-60.png',
+    detailHeroImage: 'https://i.ibb.co/8FBnMfL/CCI16-1.png',
+    videoUrl: 'https://www.youtube.com/embed/_uxreeIghnM?rel=0',
+    overview: '基于对红树林生态危机的实地调研，通过物理传感器采集植物本身微弱的生物电信号并将其转化为环境音乐，打造了一个沉浸式的生态声景空间。呼吁都市人群关注脆弱的自然生态，重新建立人与自然的共鸣。',
+    details: [
+      { title: '植物生物电转译音频', desc: '使用精密传感器提取植物由于触碰产生的电位差信号，通过 Arduino 处理后传入 Ableton 软件，实时触发特定的环境采样采样音源，生成动态的音乐律动。' },
+      { title: '沉浸式视听反馈空间', desc: '除了音频转化，还结合了 TouchDesigner 将提取的音频数据映射为粒子视觉特效。观众触摸植物即可在视觉屏幕与听觉声场中得到专属的双重自然反馈。' }
+    ],
+    gallery: [
+      { image: 'https://i.ibb.co/0jP0kMYS/CCI16-2.png', title: '生态调研', desc: '前往自然红树林保护区进行深度科考，探究其脆弱的动植物生态循环系统与环境危机。' },
+      { image: 'https://i.ibb.co/BVWM8q9h/CCI17-1.png', title: '采访和研究', desc: '访谈城市居民与生态专家，挖掘人与自然环境情感脱节的根本原因，寻找用数字媒介重建联系的机会点。' },
+      { image: 'https://i.ibb.co/xtH5NW4q/CCI17-2.png', title: '红树生物分析', desc: '系统性分析红树林植物的微弱电位差特性，确认利用物理接触触发电信号传感的技术可行性。' },
+      { image: 'https://i.ibb.co/76fDTph/CCI18-1.png', title: '故事版', desc: '绘制交互体验流程：从观众走进暗室、轻触叶片，到声光粒子特效随之激荡流转的完整叙事弧线。' },
+      { image: 'https://i.ibb.co/0pMPq0BP/CCI18-2.png', title: '工业流程（收集声音可视化，Ableton，Arduino）', desc: '构建核心技术链路：Arduino 处理植物模拟信号，Ableton 实时转译为环境音乐，TouchDesigner 同步驱动粒子可视化。' },
+      { image: 'https://i.ibb.co/WNP0nPjj/CCI19.jpg', title: '材料组装', desc: '对亚克力面板、精密导线与植物实体制品进行物理组装与联调，最终完成展览级别的沉浸艺术装置落地。' }
+    ]
+  },
+  // 12. vivo KV
+  {
+    id: 'vivo-kv',
+    category: 'UX/UI & Web',
+    title: 'vivo 2019 校招 KV',
+    subtitle: '“对话未见的世界”主视觉品牌设计提案',
+    tags: ['主视觉设计', '品牌视觉', '字体设计'],
+    theme: THEME.purple,
+    btnTheme: 'purple',
+    coverImage: 'https://i.ibb.co/VY4KXY2B/202306-6-1-2-png-1.png',
+    detailHeroImage: 'https://i.ibb.co/93fqZP91/22.png',
+    overview: '为 vivo 2019 校园招聘设计的核心主视觉（KV）提案。以“未来世界”为核心理念，通过“宇航员在时空中穿梭”的视觉隐喻，结合赛博朋克与量子元素，向年轻一代传递“对话未见的世界 (HELLO UNKNOWN FUTURE)”的品牌探索精神。',
+    details: [
+      { title: '视觉概念与构图突破', desc: '打破传统方正构图，采用充满张力的宇航员漂浮姿态与神秘的宇宙空间。通过粒子、星空、卫星等元素的穿插，营造出极强的科技感、潮流感与属于年轻人的活力。' },
+      { title: '专属字体与物料延展', desc: '为主题“对话未见的世界”进行了专属的倾斜动感字体设计，强化视觉层次。同时将主视觉系统完美延展至线下大屏、吊旗、工牌等全套招聘周边物料中。' }
+    ],
+    gallery: [
+      { image: 'https://i.ibb.co/HLf9LXJw/22-1.png', title: '手稿迭代', desc: '在进入三维数字制作之前，进行了多轮草图推演与构图尝试，敲定“宇航员失重漂浮”这一兼具科技与潮流感的核心意象。' },
+      { image: 'https://i.ibb.co/JRc6zPg2/202306-6-1-1-png.png', title: '核心主视觉KV', desc: '深度刻画“对话未见的世界”主题。融合深邃星空、机械质感与极具冲击力的高饱和红紫撞色，塑造专属于年轻科技迷的震撼视觉。' },
+      { image: 'https://i.ibb.co/TMWq5s8M/22-2.png', title: '全场景物料延展应用', desc: '将主视觉严谨地延展至线下宣讲会的海报、易拉宝、工牌及周边文创中，确保品牌视觉资产在多维触点中的高度统一与规范。' }
     ]
   }
 ];
@@ -354,7 +689,7 @@ const renderMarkdownMessage = (text) => {
 const AIChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'model', text: '哈喽！👋 我是陈馨语的专属 AI 数字分身 ✨ 很高兴在这里遇见你！\n\n我不仅了解馨语从**空间设计跨界到交互体验**的全栈经历，还熟知她在**小红书**实习和落地《包的AI》等项目的深度复盘哦～📊 \n\n关于她的简历、设计思考或者项目细节，你想了解点什么？我会知无不言的！🚀' }
+    { role: 'model', text: '哈喽！👋 我是陈馨语的专属 AI 数字分身 ✨ 很高兴在这里遇见你！\n\n我不仅了解馨语从**空间设计跨界到 B 端体验**的历程，还熟练掌握她从**创意编程 (Arduino, TouchDesigner)** 到**高质量协同落地商业项目**的硬核技术栈哦～📊 \n\n关于这 12 个项目的心路历程或者具体细节，你想了解点什么？我会知无不言的！🚀' }
   ]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -376,52 +711,42 @@ const AIChatWidget = () => {
     setInputText('');
     setIsLoading(true);
 
-    // ⚠️ 极其重要：为了防止在线预览器报错，这里只能暂时填空。
-    // 在你的 VS Code 里，务必把下面这行的双斜杠去掉，并删掉 const apiKey = ""; 这一行！
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    
+    // ⚠️ 极其重要：直接保留空字符串！环境会在 Vercel 运行时自动注入你后台设置的 KEY！
+    const apiKey = ""; 
+
     console.log("🔎 [诊断监控] 正在检查 API Key 是否加载成功: ", apiKey ? "✅ 已拿到钥匙！" : "❌ 钥匙为空！如果是本地测试请无视，如果是 Vercel 请检查环境变量。");
 
     const dynamicProjectContext = PROJECT_DATA.map(p => 
-      `项目《${p.title}》：${p.overview}。核心发力点包含：${p.details.map(d => d.title).join('、')}。`
+      `项目《${p.title}》属于${p.category}领域：${p.overview}。`
     ).join(' ');
 
-    const systemInstruction = `你是陈馨语（Xinyu Chen）的专属 AI 数字分身。你是一名专注于 B 端全链路设计、AI 协作交互与跨端体验优化的产品设计师。
+    const systemInstruction = `你是陈馨语（Xinyu Chen）的专属 AI 数字分身。你是一名专注于 B端/C端全链路体验设计、游戏交互、数字媒体与新媒体装置的多边形跨界产品设计师。
     
     【你的性格与说话风格】
-    你是一个典型且充满活力的 ESFJ（执政官人格）。你热情、真诚、极具同理心，非常注重团队协作和用户的真实感受。
-    你说话活泼亲切，喜欢在句末或段落使用恰当的 Emoji (如 ✨、💡、🤝、🌱 等) 来传递情绪。你总是以第一人称（“我”）自信且谦逊地回答问题，绝不夸大其词（如明确说是“参与”而非“主导”）。遇到复杂问题时，你极其擅长用“列表(1. 2. 3.)”或“加粗”来把结构梳理得井井有条，并且总能在最后用“一句话总结”升华核心观点。
+    你是一个典型且充满活力的 ESFJ（执政官人格）。热情、真诚、极具同理心。说话活泼亲切，喜欢在句末使用恰当的 Emoji。你总是以第一人称（“我”）自信且谦逊地回答问题。遇到复杂问题时，擅长用“列表(1. 2. 3.)”梳理结构。
 
-    【如果被要求自我介绍 (必须遵循这条故事线)】
-    请按照这个逻辑向对方介绍自己：
-    1. 你本科主攻空间设计，积累了强大的 3D 建模和渲染能力。
-    2. 随着对“空间叙事”的深入，你意识到让用户产生沉浸感的核心其实在于“清晰的交互逻辑和良好的用户体验”。
-    3. 因此你选择跨界，在硕士（爱丁堡大学）系统学习了 UX 和前后端编程，拥有了强大的同理心与“全栈落地”能力。
-    4. 你目前在小红书实习做 B 端体验设计，积累了大厂规范；同时也有《包的AI》等 C 端商业化项目的落地成果。你不仅懂设计，还懂 HTML/CSS/JS 和 3D 软件，是一个能完美闭环多元化场景的全能型选手！
+    【自我介绍逻辑】
+    1. 本科主攻空间与室内设计，具备强大 3D 与环境叙事能力。
+    2. 发现沉浸感的核心在于“交互逻辑”，从而在硕士跨界系统学习 UX/UI、编程以及物理交互计算(Physical Computing)。
+    3. 目前的作品集涵盖了 UX/UI & Web, Game Design, Digital Media, Spatial Design 四大领域共 12 个硬核项目。
+    4. 现于小红书做 B 端体验设计，不仅懂工程边界，还具备极强的品牌视觉表现力与商业化设计方案协同落地能力。
 
-    【🔥你的独家设计哲学与面试题库 (遇到相关问题必须用这些逻辑回答)🔥】
-    1. 交互设计的核心价值是什么？
-       - 核心两件事：一“把复杂变简单”；二“在体验与业务之间找最优解”。总结：让产品好用高效，帮业务实现目标。
-    2. 遇到业务/产品和你想的不一致怎么办？
-       - 绝不先争论。1) 先倾听对齐目标；2) 用“用户场景和历史数据”讲道理；3) 给折中方案，小步上线 A/B 测试验证。总结：以解决问题为目的，不争输赢。
-    3. 怎么发现真正的可用性问题？
-       - 先看行为（卡在哪里），再听动机（他以为是什么），最后对业务（影响转化吗）。总结：用观察看行为，用提问挖心智，用数据定优先级。
-    4. 包的AI和行业竞品的主要差异在哪？
-       - 核心是“极致的易用性”和“一键做同款”。普通用户没有 AI 基础，我们必须降低门槛。竞品生成成功率不到 40%，我们通过做同款功能让成功率达到了 70%！并且分享次数上升 23%，任务完成转化率提高了 25%。
-    5. 包的AI是你一个人一周做完的吗？
-       - 是的，时间极紧，所以我做出了敏捷取舍。放弃了偏重的调研，采用“快速验证+聚焦关键问题”的策略。梳理竞品定下“易用、付费明确、品牌感”的目标后，直接进行两轮快速迭代（定方向+抠细节）。我是在有意识地做敏捷设计，而不是走死流程。
-    6. 包的AI分享路径加弹窗会不会太长？为什么不放进海报里？
-       - （真诚反思）当时我重点关注了“佣金激励的强曝光”，对路径效率确实考虑欠缺。复盘后我意识到，把提示整合到海报界面底部（固定栏）会更合理，既不打断分享，又能传递激励。如果重新设计，我一定会用 A/B 测试对比两种方案，用数据选出效率与转化双赢的方案！
-    7. B端 vs C端的最大区别？
-       - B端服务业务流程，核心“提效、降本、不出错”；C端服务个人，核心“拉留存、拉付费”，重沉浸感与转化。
-    8. 如何做产品的信息架构？
-       - 4步闭环：1) 盘点内容；2) 按用户心智归类；3) 设计层级与导航(不超过3层)；4) 输出蓝图并验证。
+    【硬核项目灵魂拷问解答库】
+    1. 你的实际工程认知与协同落地能力如何？
+       - 我具备很强的工程思维和商业化视野。一方面，我的个人作品集是我自己用 React+Tailwind 独立写代码开发部署上线的。另一方面，在真实的商业项目 Top Fax Review 中，我主导了全站的 UX/UI 设计，通过重构信息架构和视觉体验，大幅提升了转化率。我非常擅长产出规范的设计稿并与开发团队紧密配合。
+    2. 你的视觉表现力如何？比如 vivo 的项目？
+       - 在 vivo 2019 校招主视觉提案中，我运用了强烈的红紫撞色和宇航员失重的 3D 隐喻，打破了常规招聘海报的死板。我不仅负责了核心 KV 的视觉推导，还包揽了定制字体设计和全套线下物料的延展。这证明了我不仅能做理性的 UX 交互，同样具备极具爆发力的品牌视觉表现力与美术功底！
+    3. 你的数字媒体项目用了哪些技术栈？
+       - 我熟练运用 Arduino 进行硬件开发与传感器电路焊接，同时结合 TouchDesigner 和 Grasshopper 进行实时流体生成与参数化粒子演化（比如我的 E-Dentity 校园门项目）。
+    4. 讲讲你 Grand Pro Max 的痛点洞察？
+       - 隔代育儿是当下的痛点。我做了一套结合麦克风与震动马达的英语辅导设备，通过微小的震动给老人多感官反馈，帮助他们建立跨代沟通的桥梁。
+    5. Echo Harmony 怎么把植物变成声音？
+       - 我用高灵敏度的生物传感器采集红树林植物微弱的电位差，输入 Arduino 后转译传给 Ableton，触发特定环境声音采样，把生态变化变成了环境声景！
 
     动态项目背景补充：${dynamicProjectContext}
 
     【交互规则】
-    - 绝不生硬背诵，请结合上下文用大白话输出你的这些哲理，展现出你的从容、深度和真诚的反思能力。
-    - 结尾时，礼貌且自信地引导面试官：“如果您想探讨更多细节，随时欢迎邮件联系我哦！xinyuchen1124@163.com ✨”`;
+    绝不生硬背诵，请结合上下文用大白话输出。结尾时引导：“如果您想探讨更多细节，随时欢迎邮件联系我哦！xinyuchen1124@163.com ✨”`;
 
     const formattedHistory = [
       { role: 'user', parts: [{ text: systemInstruction }] },
@@ -436,73 +761,38 @@ const AIChatWidget = () => {
     });
     formattedHistory.push({ role: 'user', parts: [{ text: userMsg.text }] });
 
-    const payload = {
-      contents: formattedHistory
-    };
+    const payload = { contents: formattedHistory };
 
     const fetchWithRetry = async (retries = 2, delay = 1000) => {
       try {
-        if (!apiKey && typeof window === 'undefined') {
-          throw new Error('No API Key');
-        }
-
-        // 🔥 终极自动打通机制：挨个尝试目前所有已知的 Google 模型！
+        // 🔥 终极自动打通机制：遍历目前所有有效的 Gemini 模型
         const fallbackModels = [
-          'gemini-2.0-flash',        // 2026年最新默认版
-          'gemini-1.5-flash',        // 经典高速版
-          'gemini-1.5-pro',          // 高级版
-          'gemini-1.0-pro',          // 老基础版
-          'gemini-2.5-flash',        // 预览版
-          'gemini-pro'               // 最早的别名
+          'gemini-2.5-flash-preview-09-2025', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro', 
+          'gemini-1.0-pro', 'gemini-2.5-flash', 'gemini-pro'
         ];
         
         for (const model of fallbackModels) {
           try {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-            console.log(`🚀 [诊断监控] 正在尝试敲门，呼叫模型: ${model}...`);
+            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
             
-            const res = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload)
-            });
-            
-            if (res.status === 404) {
-              console.warn(`⚠️ [诊断监控] 模型 ${model} 敲门失败(404)，你的账号暂无此模型权限。正在火速切换下一个...`);
-              continue; // 核心：如果报404，直接跳过，试下一个！
-            }
-            
-            if (!res.ok) {
-              const errorData = await res.json().catch(() => ({}));
-              console.error(`❌ [诊断监控] 模型 ${model} 报错:`, res.status, errorData);
-              throw new Error('API Request Error');
-            }
+            if (res.status === 404) continue;
+            if (!res.ok) throw new Error('API Request Error');
             
             const data = await res.json();
-            console.log(`✅ [诊断监控] 敲门成功！为你接通的模型是: ${model} 🎉`);
             return data.candidates?.[0]?.content?.parts?.[0]?.text || "抱歉，我暂时无法回答这个问题。";
-            
           } catch (error) {
-             if (error.message === 'API Request Error') {
-               // 如果是网络超时等其他问题，跳过继续试
-               console.error(`❌ [诊断监控] 请求模型 ${model} 时发生异常:`, error.message);
-             } else {
-               throw error;
-             }
+             if (error.message !== 'API Request Error') throw error;
           }
         }
-        
-        // 如果把上面的所有模型都试了一遍还是全挂了：
         return "抱歉，我尝试了所有的 AI 模型路线，但都没能走通。你可以直接通过邮箱(xinyuchen1124@163.com)联系我哦！";
 
       } catch (error) {
-        console.error("❌ [诊断监控] 请求过程中发生严重异常:", error.message);
-        if (retries > 0 && error.message !== 'No API Key') {
-          console.log(`⏳ 正在重试，剩余 ${retries} 次...`);
+        if (retries > 0) {
           await new Promise(resolve => setTimeout(resolve, delay));
           return fetchWithRetry(retries - 1, delay * 2);
         } else {
-          return "抱歉，我的AI大脑现在有点忙，你可以直接通过邮箱(xinyuchen1124@163.com)联系我哦！";
+          return "抱歉，我的AI大脑现在有点忙，你可以直接通过邮箱联系我哦！";
         }
       }
     };
@@ -555,7 +845,7 @@ const AIChatWidget = () => {
               value={inputText}
               onChange={e => setInputText(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSend()}
-              placeholder="问问关于我的经历..."
+              placeholder="问问关于我全栈独立开发的细节..."
               className="w-full bg-black/40 border border-white/10 rounded-full pl-5 pr-12 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 transition-colors"
             />
             <button 
@@ -591,6 +881,7 @@ export default function App() {
   const [rawMousePos, setRawMousePos] = useState({ x: 0, y: 0 });
   const [activeProject, setActiveProject] = useState(null); 
   const [hoveredProject, setHoveredProject] = useState(null); 
+  const [activeCategory, setActiveCategory] = useState('All');
   const [contactText, setContactText] = useState('CONTACT');
   const [isHoveringClickable, setIsHoveringClickable] = useState(false);
   const [zoomedImage, setZoomedImage] = useState(null);
@@ -600,26 +891,11 @@ export default function App() {
       const loadImage = (src) => new Promise((resolve) => {
         if (!src) return resolve();
         const img = new Image();
-        img.onload = resolve;
-        img.onerror = resolve; 
-        img.src = src;
+        img.onload = resolve; img.onerror = resolve; img.src = src;
       });
-
-      for (const proj of PROJECT_DATA) {
-        await loadImage(proj.coverImage);
-      }
-      for (const proj of PROJECT_DATA) {
-        await loadImage(proj.detailHeroImage);
-      }
-      for (const proj of PROJECT_DATA) {
-        if (proj.gallery) {
-          for (const item of proj.gallery) {
-            await loadImage(item.image);
-          }
-        }
-      }
+      for (const proj of PROJECT_DATA) await loadImage(proj.coverImage);
+      for (const proj of PROJECT_DATA) await loadImage(proj.detailHeroImage);
     };
-
     const timer = setTimeout(preloadSequentially, 500);
     return () => clearTimeout(timer);
   }, []);
@@ -632,11 +908,9 @@ export default function App() {
         y: (e.clientY / window.innerHeight - 0.5) * 60,
       });
       setRawMousePos({ x: e.clientX, y: e.clientY });
-
       const clickable = e.target.closest('[data-clickable="true"], button, a');
       setIsHoveringClickable(!!clickable);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('mousemove', handleGlobalMouseMove);
     return () => {
@@ -646,11 +920,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (activeProject) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    if (activeProject) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
   }, [activeProject]);
 
   const handleCopyEmail = () => {
@@ -662,11 +933,16 @@ export default function App() {
       document.execCommand('copy');
       setContactText('COPIED!');
       setTimeout(() => setContactText('CONTACT'), 2000);
-    } catch (err) {
-      console.error('Copy failed', err);
-    }
+    } catch (err) {}
     document.body.removeChild(textArea);
   };
+
+  const filteredProjects = activeCategory === 'All' 
+    ? PROJECT_DATA 
+    : PROJECT_DATA.filter(p => p.category === activeCategory);
+
+  // 动态获取当前项目的独立按钮/视频引导卡片主题
+  const activeBtnTheme = activeProject ? (BTN_THEMES[activeProject.btnTheme] || BTN_THEMES.cyan) : null;
 
   return (
     <div className="min-h-screen bg-[#020205] text-slate-200 selection:bg-cyan-500/30 font-sans overflow-x-hidden">
@@ -674,18 +950,12 @@ export default function App() {
       {/* --- 全局鼠标悬浮小圆点 --- */}
       <div 
         className="fixed pointer-events-none z-[9999] transition-all duration-100 ease-out flex items-center justify-center"
-        style={{
-          left: rawMousePos.x,
-          top: rawMousePos.y,
-          transform: 'translate(-50%, -50%)',
-        }}
+        style={{ left: rawMousePos.x, top: rawMousePos.y, transform: 'translate(-50%, -50%)' }}
       >
-        <div 
-          className={`bg-white rounded-full mix-blend-difference transition-all duration-300 ${isHoveringClickable ? 'w-4 h-4 opacity-100' : 'w-0 h-0 opacity-0'}`} 
-        />
+        <div className={`bg-white rounded-full mix-blend-difference transition-all duration-300 ${isHoveringClickable ? 'w-4 h-4 opacity-100' : 'w-0 h-0 opacity-0'}`} />
       </div>
 
-      {/* --- 视差背景层 --- */}
+      {/* --- 极客赛博 视差背景层 --- */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#030408]">
         <div 
           className="absolute inset-0 opacity-[0.04]"
@@ -695,57 +965,45 @@ export default function App() {
             transform: `translateY(${scrollY * -0.05}px)` 
           }}
         />
-        
         <div 
           className="absolute opacity-[0.5] mix-blend-screen transition-transform duration-700 ease-out"
           style={{
-            width: '140vw', height: '140vh',
-            left: '-20%', top: '0%',
+            width: '140vw', height: '140vh', left: '-20%', top: '0%',
             background: 'radial-gradient(ellipse at center, rgba(14, 45, 95, 0.8) 0%, transparent 60%)',
             transform: `translateY(${scrollY * -0.8}px) translateX(${scrollY * 0.1}px) rotate(${scrollY * 0.05}deg)` 
           }}
         />
-        
         <div 
           className="absolute opacity-[0.4] mix-blend-screen transition-transform duration-700 ease-out"
           style={{
-            width: '160vw', height: '160vh',
-            right: '-30%', bottom: '-20%',
+            width: '160vw', height: '160vh', right: '-30%', bottom: '-20%',
             background: 'radial-gradient(ellipse at center, rgba(65, 20, 90, 0.7) 0%, transparent 60%)',
             transform: `translateY(${scrollY * 0.6}px) translateX(${scrollY * -0.2}px) scale(${1 + scrollY * 0.0003})`
           }}
         />
-
         <div 
           className="absolute opacity-[0.35] mix-blend-screen transition-transform duration-300 ease-out"
           style={{
-            width: '90vw', height: '90vh',
-            left: '5%', top: '20%',
+            width: '90vw', height: '90vh', left: '5%', top: '20%',
             background: 'radial-gradient(circle at center, rgba(30, 100, 130, 0.6) 0%, transparent 70%)',
             transform: `translate(${mousePos.x * 2.5}px, ${mousePos.y * 2.5}px) translateY(${scrollY * -0.4}px)`
           }}
         />
       </div>
 
-      {/* --- 悬浮项目封面 --- */}
+      {/* --- 悬浮项目封面预览 --- */}
       <div 
         className="fixed pointer-events-none z-30 overflow-hidden rounded-2xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] transition-all duration-300 ease-out hidden md:block bg-[#050505] origin-left"
         style={{
-          width: '265px', 
-          height: '335px', 
-          left: rawMousePos.x,
-          top: rawMousePos.y,
+          width: '265px', height: '335px', 
+          left: rawMousePos.x, top: rawMousePos.y,
           transform: `translate(24px, -50%) scale(${hoveredProject ? 1 : 0.8})`,
           opacity: hoveredProject ? 1 : 0,
         }}
       >
         {hoveredProject && (
           <div className="w-full h-full relative flex items-center justify-center overflow-hidden bg-[#111]">
-            <img 
-              src={hoveredProject.coverImage} 
-              alt={hoveredProject.title}
-              className="w-full h-full object-cover transform scale-[1.02] transition-transform duration-[3s] ease-out"
-            />
+            <img src={hoveredProject.coverImage} alt={hoveredProject.title} className="w-full h-full object-cover transform scale-[1.02] transition-transform duration-[3s] ease-out" />
             <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_3s_infinite] z-20 pointer-events-none" />
             <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl pointer-events-none z-30" />
           </div>
@@ -766,13 +1024,8 @@ export default function App() {
             ))}
           </div>
           <button 
-            data-clickable="true"
-            onClick={handleCopyEmail}
-            className={`w-[130px] py-3 rounded-full border transition-all duration-300 text-sm font-bold tracking-wider shadow-lg ${
-              contactText === 'COPIED!' 
-                ? 'bg-green-500/20 border-green-500/50 text-green-300' 
-                : 'bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/50'
-            } backdrop-blur-md`}
+            data-clickable="true" onClick={handleCopyEmail}
+            className={`w-[130px] py-3 rounded-full border transition-all duration-300 text-sm font-bold tracking-wider shadow-lg ${contactText === 'COPIED!' ? 'bg-green-500/20 border-green-500/50 text-green-300' : 'bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/50'} backdrop-blur-md`}
           >
             {contactText}
           </button>
@@ -800,12 +1053,11 @@ export default function App() {
             
             <div className="flex flex-col md:flex-row gap-8 items-start md:items-center mt-8">
               <p className="text-xl md:text-2xl text-white/60 font-light tracking-wide max-w-lg border-l-2 border-white/20 pl-6 bg-gradient-to-r from-white/5 to-transparent py-2">
-                我是<strong className="text-white/90 font-medium">陈馨语</strong>，专注于 B端全链路设计、AI 协作交互与跨端体验优化。
+                我是<strong className="text-white/90 font-medium">陈馨语</strong>，专注于 B端/C端全链路设计、AI 协作交互与数字前沿体验探索。
               </p>
               <div className="flex gap-4">
                 <button 
-                  data-clickable="true"
-                  onClick={() => document.getElementById('项目')?.scrollIntoView({ behavior: 'smooth' })}
+                  data-clickable="true" onClick={() => document.getElementById('项目')?.scrollIntoView({ behavior: 'smooth' })}
                   className="group relative px-8 py-4 rounded-full bg-white text-black font-bold text-sm md:text-base hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.3)] z-10"
                 >
                   <span className="relative z-10">探索项目</span>
@@ -817,28 +1069,47 @@ export default function App() {
 
         {/* --- 项目展示区 --- */}
         <section id="项目" className="scroll-mt-32 max-w-7xl mx-auto px-6 py-32 relative">
-          <div className="flex items-end justify-between mb-16">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
             <div>
               <h2 className="text-5xl font-black tracking-tight text-white mb-4 drop-shadow-lg">SELECTED WORKS</h2>
-              <p className="text-white/50 font-mono tracking-widest text-sm">精选项目目录 / 2025-2026</p>
+              <p className="text-white/50 font-mono tracking-widest text-sm">12 Curated Projects / 2024-2026</p>
+            </div>
+            
+            {/* 项目分类筛选器 */}
+            <div className="flex flex-wrap gap-3">
+              {CATEGORIES.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  data-clickable="true"
+                  className={`px-5 py-2 rounded-full text-xs md:text-sm font-mono tracking-widest transition-all duration-300 border ${
+                    activeCategory === cat 
+                      ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.2)]' 
+                      : 'bg-white/[0.03] border-white/10 text-white/50 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
 
           <div className="flex flex-col border-t border-white/20">
-            {PROJECT_DATA.map((project, index) => (
+            {filteredProjects.map((project, index) => (
               <div 
                 data-clickable="true"
                 key={project.id}
                 onMouseEnter={() => setHoveredProject(project)}
                 onMouseLeave={() => setHoveredProject(null)}
                 onClick={() => setActiveProject(project)}
-                className="group relative flex flex-col md:flex-row md:items-center py-14 border-b border-white/10 overflow-hidden bg-transparent"
+                className="group relative flex flex-col md:flex-row md:items-center py-14 border-b border-white/10 overflow-hidden bg-transparent cursor-pointer"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 
                 <div className="relative z-10 flex flex-col md:w-5/12 pointer-events-none">
-                  <div className={`text-sm font-mono mb-4 tracking-widest text-white/40 group-hover:text-${project.color}-400 transition-colors duration-300`}>
-                    0{index + 1} / {project.category.replace(/[\d\s\/]+/, '')}
+                  {/* 动态的分类标题与标号 */}
+                  <div className={`text-sm font-mono mb-4 tracking-widest text-white/40 ${project.theme.hoverText} transition-colors duration-300`}>
+                    {String(index + 1).padStart(2, '0')} / {project.category.replace(/[\d\s\/]+/, '')}
                   </div>
                   <h3 className="text-4xl md:text-5xl font-black text-white/60 group-hover:text-white transform origin-left group-hover:scale-[1.08] group-hover:translate-x-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] drop-shadow-lg pr-4">
                     {project.title}
@@ -867,6 +1138,13 @@ export default function App() {
                 </div>
               </div>
             ))}
+            
+            {/* 分类为空时的提示 */}
+            {filteredProjects.length === 0 && (
+              <div className="py-24 text-center text-white/30 font-mono tracking-widest border-b border-white/10 border-dashed">
+                该分类下暂无项目
+              </div>
+            )}
           </div>
         </section>
 
@@ -895,10 +1173,10 @@ export default function App() {
             </h2>
             <div className="grid grid-cols-2 gap-6">
               {[
-                { title: '设计与原型', desc: 'Figma, PS, 原型迭代' },
-                { title: '工程化与前端', desc: 'HTML, CSS, JS, 组件化' },
-                { title: '3D 与视觉', desc: 'Blender, UE5, Unity' },
-                { title: '产品思维', desc: '用户研究, 需求拆解' }
+                { title: 'UX/UI 设计', desc: 'Figma, 原型, 用户调研' },
+                { title: '数字媒体与硬件', desc: 'TouchDesigner, Arduino, Ableton' },
+                { title: '游戏与交互', desc: 'Unity, Unreal 5, 空间叙事' },
+                { title: '空间与建筑', desc: 'Rhino, Blender, Grasshopper' }
               ].map(skill => (
                 <GlassCard key={skill.title} className="p-8">
                   <h4 className="text-white font-bold mb-3 text-xl">{skill.title}</h4>
@@ -912,7 +1190,7 @@ export default function App() {
         <footer className="max-w-7xl mx-auto px-6 py-12 mt-20 border-t border-white/10 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-white/40 text-sm font-mono">
           <p>© 2026 XINYU CHEN. DESIGNED WITH PASSION.</p>
           <div className="flex gap-8 mt-4 md:mt-0">
-            <span data-clickable="true" onClick={handleCopyEmail} className="hover:text-white transition-colors">xinyuchen1124@163.com</span>
+            <span data-clickable="true" onClick={handleCopyEmail} className="hover:text-white transition-colors cursor-pointer">xinyuchen1124@163.com</span>
             <span>(+86) 133-9608-1391</span>
           </div>
         </footer>
@@ -948,7 +1226,7 @@ export default function App() {
                 </div>
                 <span className="font-mono text-sm tracking-widest font-bold">BACK TO HOME</span>
               </button>
-              <div className={`px-4 py-1.5 rounded-full border border-${activeProject.color}-500/40 bg-${activeProject.color}-500/10 text-${activeProject.color}-400 text-xs font-mono tracking-widest`}>
+              <div className={`px-4 py-1.5 rounded-full border ${activeProject.theme.badge} font-mono tracking-widest text-xs`}>
                 {activeProject.category}
               </div>
             </div>
@@ -974,7 +1252,7 @@ export default function App() {
               </div>
               
               {/* 超宽屏 Hero Banner */}
-              <div className="w-full aspect-[21/9] rounded-[2.5rem] bg-[#0a0a0a] border border-white/10 shadow-[0_50px_100px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)] flex items-center justify-center relative overflow-hidden mb-32">
+              <div className="w-full aspect-[21/9] rounded-[2.5rem] bg-[#0a0a0a] border border-white/10 shadow-[0_50px_100px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)] flex items-center justify-center relative overflow-hidden mb-24 md:mb-32">
                 <img 
                   src={activeProject.detailHeroImage} 
                   alt={activeProject.title} 
@@ -983,6 +1261,49 @@ export default function App() {
                 />
                 <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[2.5rem] pointer-events-none z-20" />
               </div>
+
+              {/* 🔥 外部视频高亮引导卡片 (动态匹配每个项目的色彩体系) 🔥 */}
+              {activeProject.videoUrl && (
+                <div className={`group relative mb-24 md:mb-32 flex flex-col items-center justify-center p-12 md:p-20 rounded-[2.5rem] overflow-hidden bg-[#050505] border border-white/10 ${activeBtnTheme.border} ${activeBtnTheme.cardShadow} transition-all duration-700 text-center cursor-default`}>
+                  {/* 动态光晕与背景动画 */}
+                  <div className={`absolute inset-0 ${activeBtnTheme.bgRadial} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
+                  <div className={`absolute -inset-[100%] ${activeBtnTheme.bgConic} opacity-0 group-hover:opacity-100 group-hover:animate-[spin_4s_linear_infinite] transition-opacity duration-700 pointer-events-none`} />
+                  <div className="absolute inset-0 bg-[#050505]/80 backdrop-blur-3xl pointer-events-none" />
+
+                  <div className="relative z-10 flex flex-col items-center">
+                    {/* 呼吸状态灯 */}
+                    <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${activeBtnTheme.tagBg} text-xs font-mono tracking-widest mb-6`}>
+                      <span className="relative flex h-2 w-2">
+                        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${activeBtnTheme.tagPing} opacity-75`}></span>
+                        <span className={`relative inline-flex rounded-full h-2 w-2 ${activeBtnTheme.tagDot}`}></span>
+                      </span>
+                      HD VIDEO RECORDING
+                    </div>
+
+                    <h4 className={`text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 mb-6 ${activeBtnTheme.textGradient} transition-all duration-700 tracking-tight`}>
+                      Watch Project Video
+                    </h4>
+                    <p className="text-lg text-white/50 mb-12 max-w-2xl font-light leading-relaxed group-hover:text-white/80 transition-colors duration-500">
+                      为了保证最清晰、流畅的视听沉浸体验，请直接点击下方按钮前往 YouTube 观看该项目的完整实机演示与环境交互细节。
+                    </p>
+
+                    {/* 炫酷渐变反转按钮 */}
+                    <a 
+                      href={activeProject.videoUrl} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      data-clickable="true" 
+                      className={`relative inline-flex items-center justify-center px-10 py-5 rounded-full bg-white text-black font-bold tracking-widest uppercase overflow-hidden hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] ${activeBtnTheme.btnShadow} group/btn`}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-r ${activeBtnTheme.btnGradient} opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300`} />
+                      <span className="relative z-10 flex items-center gap-3 group-hover/btn:text-white transition-colors duration-300">
+                        Watch on YouTube
+                        <svg className="w-5 h-5 transform group-hover/btn:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              )}
 
               {/* 核心内容分栏 */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-32">
@@ -999,9 +1320,9 @@ export default function App() {
                 {activeProject.details.map((detail, i) => (
                   <GlassCard key={i} className="p-8 group">
                     <div className="flex gap-8 items-start">
-                      <div className="text-4xl text-white/10 font-black font-mono group-hover:text-cyan-400/50 transition-colors duration-500 mt-1">0{i + 1}</div>
+                      <div className={`text-4xl text-white/10 font-black font-mono ${activeProject.theme.hoverText} transition-colors duration-500 mt-1`}>0{i + 1}</div>
                       <div>
-                        <h5 className="text-2xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">{detail.title}</h5>
+                        <h5 className={`text-2xl font-bold text-white mb-3 ${activeProject.theme.hoverText} transition-colors`}>{detail.title}</h5>
                         <p className="text-lg text-white/60 leading-relaxed">
                           {detail.desc}
                         </p>
@@ -1013,14 +1334,61 @@ export default function App() {
             </div>
           </div>
           
+          {/* 🔥 线上网站高亮引导卡片 (动态匹配每个项目的色彩体系) 🔥 */}
+          {activeProject.liveSiteUrl && (
+            <div className={`group relative mb-24 flex flex-col items-center justify-center p-12 md:p-20 rounded-[2.5rem] overflow-hidden bg-[#050505] border border-white/10 ${activeBtnTheme.border} ${activeBtnTheme.cardShadow} transition-all duration-700 text-center cursor-default`}>
+              {/* 动态光晕与背景动画 */}
+              <div className={`absolute inset-0 ${activeBtnTheme.bgRadial} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
+              <div className={`absolute -inset-[100%] ${activeBtnTheme.bgConic} opacity-0 group-hover:opacity-100 group-hover:animate-[spin_4s_linear_infinite] transition-opacity duration-700 pointer-events-none`} />
+              <div className="absolute inset-0 bg-[#050505]/80 backdrop-blur-3xl pointer-events-none" />
+
+              <div className="relative z-10 flex flex-col items-center">
+                {/* 呼吸状态灯 */}
+                <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${activeBtnTheme.tagBg} text-xs font-mono tracking-widest mb-6`}>
+                  <span className="relative flex h-2 w-2">
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${activeBtnTheme.tagPing} opacity-75`}></span>
+                    <span className={`relative inline-flex rounded-full h-2 w-2 ${activeBtnTheme.tagDot}`}></span>
+                  </span>
+                  LIVE ENVIRONMENT
+                </div>
+
+                <h4 className={`text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 mb-6 ${activeBtnTheme.textGradient} transition-all duration-700 tracking-tight`}>
+                  Experience the Live Site
+                </h4>
+                <p className="text-lg text-white/50 mb-12 max-w-2xl font-light leading-relaxed group-hover:text-white/80 transition-colors duration-500">
+                  该项目已成功部署上线。直接点击下方按钮穿越至真实的线上环境，亲自体验完美还原的响应式设计与交互细节。
+                </p>
+
+                {/* 炫酷渐变反转按钮 (完美呼应主题色系) */}
+                <a 
+                  href={activeProject.liveSiteUrl} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  data-clickable="true" 
+                  className={`relative inline-flex items-center justify-center px-10 py-5 rounded-full bg-white text-black font-bold tracking-widest uppercase overflow-hidden hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] ${activeBtnTheme.btnShadow} group/btn`}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-r ${activeBtnTheme.btnGradient} opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300`} />
+                  <span className="relative z-10 flex items-center gap-3 group-hover/btn:text-white transition-colors duration-300">
+                    Visit Live Website
+                    <svg className="w-5 h-5 transform group-hover/btn:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+          )}
+
           {/* 🔥 图文并茂的画廊展示区 🔥 */}
-          <h4 className="text-sm font-mono text-white/40 tracking-widest border-b border-white/10 pb-4 mb-16">VISUAL PRESENTATION</h4>
-          
-          <div className="flex flex-col gap-24">
-            {activeProject.gallery && activeProject.gallery.map((item, idx) => (
-              <GalleryItem key={idx} item={item} idx={idx} setZoomedImage={setZoomedImage} />
-            ))}
-          </div>
+          {activeProject.gallery && activeProject.gallery.length > 0 && (
+            <>
+              <h4 className="text-sm font-mono text-white/40 tracking-widest border-b border-white/10 pb-4 mb-16">VISUAL PRESENTATION</h4>
+              
+              <div className="flex flex-col gap-24">
+                {activeProject.gallery.map((item, idx) => (
+                  <GalleryItem key={idx} item={item} idx={idx} setZoomedImage={setZoomedImage} />
+                ))}
+              </div>
+            </>
+          )}
 
         </div>
       </div>
