@@ -712,7 +712,7 @@ const AIChatWidget = () => {
     setIsLoading(true);
 
     // ⚠️ 极其重要：直接保留空字符串！环境会在 Vercel 运行时自动注入你后台设置的 KEY！
-    const apiKey = "import.meta.env.VITE_GEMINI_API_KEY"; 
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
 
     console.log("🔎 [诊断监控] 正在检查 API Key 是否加载成功: ", apiKey ? "✅ 已拿到钥匙！" : "❌ 钥匙为空！如果是本地测试请无视，如果是 Vercel 请检查环境变量。");
 
