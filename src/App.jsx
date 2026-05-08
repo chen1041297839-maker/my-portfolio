@@ -268,7 +268,7 @@ const PROJECT_DATA = [
   // 1. HI链接解析
   {
     id: 'hi-link',
-    category: '01 / B端体验设计',
+    category: 'UX/UI & Web',
     title: 'Hi 链接解析',
     subtitle: 'IM 场景下的高效信息触达解决方案',
     tags: ['界面强关联', '实时沙箱渲染', '风险控制'],
@@ -327,7 +327,7 @@ const PROJECT_DATA = [
   // 2. 待办薯 AI协作
   {
     id: 'todo-ai',
-    category: '02 / B端 AI 交互设计',
+    category: 'UX/UI & Web',
     title: '待办薯 AI协作',
     subtitle: 'IM场景下的智能协作效率助手',
     tags: ['Thinking动效', '模块化配置', '上下文记忆'],
@@ -399,7 +399,7 @@ const PROJECT_DATA = [
   // 3. 包的AI 小程序
   {
     id: 'bao-ai',
-    category: '03 / C端应用设计',
+    category: 'UX/UI & Web',
     title: '包的AI 小程序',
     subtitle: '让图像创作更轻松，更愉快的被分享',
     tags: ['视觉重塑', '一键做同款', '增长留存'],
