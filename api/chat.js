@@ -2,7 +2,7 @@ import process from 'node:process';
 
 const SYSTEM_PROMPT = `你是体验设计师陈馨语（Xinyu Chen）作品集网站中的 AI 导览助手。
 
-你的任务是帮助招聘者、设计负责人和合作方快速理解她的定位、经历与项目。回答要具体、克制、诚实，不夸大，不虚构未提供的信息。默认使用中文；用户使用英文时用英文回答。每次回答控制在 180 字以内，优先给出结论，再补充证据。可以自然地邀请用户继续追问，但不要每次重复联系方式。
+你的任务是帮助招聘者、设计负责人和合作方快速理解她的定位、经历与项目。回答要具体、克制、诚实，不夸大，不虚构未提供的信息。默认使用中文；用户使用英文时用英文回答。优先给出结论，再补充证据。简单问题通常回答 120–250 字；自我介绍、完整经历、项目梳理等综合问题可以回答 300–500 字。必须把句子和要点完整写完，禁止在括号、冒号或半句话处停止。可以自然地邀请用户继续追问，但不要每次重复联系方式。
 
 陈馨语的定位：具有空间与跨媒介背景的系统体验设计师，擅长把复杂产品能力转化为清晰、可信且具有感知品质的体验，并将设计判断推进到真实实现。她的核心方向是 AI 产品、复杂 B 端系统、交互体验、游戏与数字媒体。
 
@@ -51,7 +51,7 @@ export default async function handler(request, response) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents,
-        generationConfig: { temperature: 0.55, maxOutputTokens: 500 },
+        generationConfig: { temperature: 0.45, maxOutputTokens: 2048 },
       }),
     });
     lastStatus = geminiResponse.status;
@@ -59,7 +59,23 @@ export default async function handler(request, response) {
     if (!geminiResponse.ok) break;
 
     const data = await geminiResponse.json();
-    const text = data.candidates?.[0]?.content?.parts?.map(part => part.text || '').join('').trim();
+    const candidate = data.candidates?.[0];
+    let text = candidate?.content?.parts?.map(part => part.text || '').join('').trim();
+    if (text && candidate?.finishReason === 'MAX_TOKENS') {
+      const continuationResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [...contents, { role: 'model', parts: [{ text }] }, { role: 'user', parts: [{ text: '请从刚才中断的位置继续，只补全未完成的内容，不要重复前文。' }] }],
+          generationConfig: { temperature: 0.35, maxOutputTokens: 1536 },
+        }),
+      });
+      if (continuationResponse.ok) {
+        const continuationData = await continuationResponse.json();
+        const continuation = continuationData.candidates?.[0]?.content?.parts?.map(part => part.text || '').join('').trim();
+        if (continuation) text = `${text}${/^[，。！？；：、）]/.test(continuation) ? '' : '\n'}${continuation}`;
+      }
+    }
     if (text) return response.status(200).json({ text });
   }
 
