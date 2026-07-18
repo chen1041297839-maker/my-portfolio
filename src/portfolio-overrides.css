@@ -23,7 +23,13 @@
 .ai-message { max-width: 88%; margin-bottom: 16px; padding: 12px 14px; border-radius: 8px; font-size: 13px; line-height: 1.7; }
 .ai-message--model { margin-right: auto; color: #e7e2ea; background: #1b1820; }
 .ai-message--user { margin-left: auto; color: #f4f0f7; background: #5d3fc1; }
-.ai-message-line { display: block; }
+.ai-markdown { display: grid; gap: 10px; }
+.ai-markdown p { margin: 0; }
+.ai-markdown strong { color: #fff; font-weight: 600; }
+.ai-markdown ol, .ai-markdown ul { display: grid; gap: 7px; margin: 0; padding-left: 1.35em; }
+.ai-markdown li { padding-left: .2em; }
+.ai-markdown li::marker { color: #a98bff; font-family: Rajdhani, sans-serif; font-weight: 600; }
+.ai-markdown a { color: #ff9a7b; text-decoration: underline; text-underline-offset: 3px; }
 .ai-suggestions { display: grid; gap: 6px; margin: 4px 0 18px; }
 .ai-suggestions button { display: flex; justify-content: space-between; gap: 14px; padding: 10px 0; color: #c9c3ce; background: transparent; border: 0; border-bottom: 1px solid #302b36; text-align: left; cursor: pointer; font-size: 12px; }
 .ai-suggestions button:hover { color: #f4f0f7; }

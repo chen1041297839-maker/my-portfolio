@@ -3,8 +3,42 @@ import { useEffect, useRef, useState } from 'react'
 const WELCOME = '你好，我是馨语作品集的 AI 导览。你可以问我她的经历、重点项目、设计方法，或为什么她适合复杂产品与 AI 体验设计。'
 const SUGGESTIONS = ['她是什么类型的设计师？', '最值得先看哪个项目？', '她有哪些 AI 产品经验？']
 
+function InlineMarkdown({ text }) {
+  const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^)]+\))/g)
+  return <>{parts.map((part, index) => {
+    const bold = part.match(/^\*\*(.+)\*\*$/)
+    if (bold) return <strong key={index}>{bold[1]}</strong>
+    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/)
+    if (link) return <a href={link[2]} target="_blank" rel="noreferrer" key={index}>{link[1]}</a>
+    return part
+  })}</>
+}
+
 function MessageText({ text }) {
-  return <>{text.split('\n').map((line, index) => <span className="ai-message-line" key={`${line}-${index}`}>{line || '\u00a0'}</span>)}</>
+  const blocks = []
+  let list = null
+  const flushList = () => { if (list) { blocks.push(list); list = null } }
+
+  text.split('\n').forEach((rawLine, index) => {
+    const line = rawLine.trim()
+    const ordered = line.match(/^(\d+)[.)、]\s*(.+)$/)
+    const unordered = line.match(/^[-•]\s+(.+)$/)
+    if (ordered || unordered) {
+      const type = ordered ? 'ol' : 'ul'
+      if (!list || list.type !== type) { flushList(); list = { type, items: [] } }
+      list.items.push(ordered ? ordered[2] : unordered[1])
+      return
+    }
+    flushList()
+    if (line) blocks.push({ type: 'p', text: line, key: index })
+  })
+  flushList()
+
+  return <div className="ai-markdown">{blocks.map((block, index) => {
+    if (block.type === 'ol') return <ol key={index}>{block.items.map((item, itemIndex) => <li key={itemIndex}><InlineMarkdown text={item}/></li>)}</ol>
+    if (block.type === 'ul') return <ul key={index}>{block.items.map((item, itemIndex) => <li key={itemIndex}><InlineMarkdown text={item}/></li>)}</ul>
+    return <p key={block.key ?? index}><InlineMarkdown text={block.text}/></p>
+  })}</div>
 }
 
 export default function AIChatWidget() {
