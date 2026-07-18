@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components, no-unused-vars, no-empty, no-useless-escape */
 import React, { useState, useEffect } from 'react';
 
 // --- 3D 液态毛玻璃卡片组件 ---
@@ -264,7 +265,61 @@ const BTN_THEMES = {
   }
 };
 
-const PROJECT_DATA = [
+export const PROJECT_DATA = [
+  {
+    id: 'hologrow-webapp',
+    category: 'UX/UI & Web',
+    title: 'Hologrow WebApp',
+    subtitle: '把快速生成的 AI 数据产品，整理成可持续迭代的 B 端体验系统',
+    tags: ['B2B SaaS', 'AI 交互', '设计系统'],
+    theme: THEME.green,
+    btnTheme: 'green',
+    coverImage: '/projects/hologrow/webapp-06.jpg',
+    detailHeroImage: '/projects/hologrow/webapp-06.jpg',
+    overview: '入职虹影生长后，我独立负责主营 WebApp 的体验升级。项目并非简单改版，而是从产品结构、核心流程、AI 过程表达和组件规范四个层面，建立一套让用户能稳定使用、团队能持续迭代的体验系统。',
+    details: [
+      { title: '从页面优化到产品结构', desc: '按真实使用频率分阶段推进：先重构首页与对话入口，再补齐 onboarding、usage、integrations 与团队管理，最后为持续增加的 AI 能力建立可扩展入口。' },
+      { title: '让 AI 过程可见、结果可信', desc: '补全 thinking、tool calling 与结构化输出状态，将来源、处理过程与结论组织为可理解的阅读路径，降低等待焦虑并增强用户对结果的信任。' },
+      { title: '重塑基础管理体验', desc: '重构 Integrations、Usage 与 Team Management，把深层路径压缩为更短的任务闭环，并通过数据层级、状态与键盘交互提升专业用户效率。' },
+      { title: '建立可持续的体验规则', desc: '统一信息容器、操作反馈、状态表达和 AI 对话规范，使后续能力不必从零设计，也帮助产品、设计与研发使用同一套规则协作。' }
+    ],
+    gallery: [
+      { image: '/projects/hologrow/webapp-07.jpg', title: '问题识别与升级目标', desc: '识别页面不统一、AI 对话不完整、功能逐渐增多与缺少系统规则四类问题，将目标从“美化页面”转为建立可持续生长的体验规则。' },
+      { image: '/projects/hologrow/webapp-08.jpg', title: '分阶段整理产品体验', desc: '基于功能影响范围将迭代拆为核心体验重构、基础流程补齐与新能力跟随设计，避免复杂产品的一次性推倒重来。' },
+      { image: '/projects/hologrow/webapp-09.jpg', title: 'AI 回答过程可视化', desc: '补全推理状态、工具调用与结构化输出，让等待有反馈、过程可见、内容可复用。' },
+      { image: '/projects/hologrow/webapp-10.jpg', title: 'Integrations 与 Usage 重构', desc: '重新组织连接管理与用量数据的层级，让平台关系、连接状态和消耗趋势更容易判断。' },
+      { image: '/projects/hologrow/webapp-11.jpg', title: '结果、会话、任务与能力管理', desc: '把持续增长的 AI 能力拆分为可管理对象，支持结果分享、会话回看、长期任务与插件能力管理。' },
+      { image: '/projects/hologrow/webapp-12.jpg', title: '体验组件与状态规范', desc: '沉淀卡片、详情面板、弹窗、输入、筛选、状态以及 AI 对话组件，为后续迭代提供一致基础。' },
+      { image: '/projects/hologrow/webapp-13.jpg', title: '项目复盘', desc: '完成从页面优化到产品结构、从视觉统一到体验规则、从功能交付到优先级判断的能力转变。' }
+    ]
+  },
+  {
+    id: 'hologrow-website',
+    category: 'UX/UI & Web',
+    title: 'Hologrow 官网',
+    subtitle: '让 AI 产品价值从“技术能力”转化为用户能理解的增长答案',
+    tags: ['品牌叙事', 'Vibecoding', 'AI 产品'],
+    theme: THEME.green,
+    btnTheme: 'green',
+    coverImage: '/projects/hologrow/website-14.jpg',
+    detailHeroImage: '/projects/hologrow/website-14.jpg',
+    liveSiteUrl: 'https://hologrow.ai/',
+    overview: '我负责 Hologrow 官网的信息架构、产品叙事、UI 视觉与 Vibecoding 前端落地。核心挑战不是让页面显得更科技，而是帮助用户按正确顺序理解 Pulse 是什么、结果为什么可信，以及它与自己的工作有什么关系。',
+    details: [
+      { title: '从能力陈列转向用户判断', desc: '将官网目标从展示“我们有什么能力”，改写为帮助用户依次判断：产品是什么、是否可信、与我有什么关系、下一步做什么。' },
+      { title: '重组产品叙事路径', desc: '按产品身份、最终输出、结果可信、工作方式、差异价值与使用场景组织信息，让每一屏都回答一个关键问题。' },
+      { title: '把可信度设计出来', desc: '通过 analyst memo、数据来源、处理逻辑、confidence 与真实业务场景，展示从数据接入到分析结果的完整关系。' },
+      { title: '用 Vibecoding 推进真实落地', desc: '使用 AI 辅助开发工具将设计意图直接推进到真实网页，在浏览器里持续判断清晰度、动效、模块层次与移动端适配，并做必要取舍。' }
+    ],
+    gallery: [
+      { image: '/projects/hologrow/website-15.jpg', title: '重新定义官网需要解决的问题', desc: '从旧版信息集中、产品视角强和认知成本高的问题出发，将目标明确为建立用户的第一轮产品理解。' },
+      { image: '/projects/hologrow/website-16.jpg', title: '六段式产品叙事路径', desc: '以产品身份、产品输出、结果可信、工作方式、差异价值和使用场景逐层增加用户理解。' },
+      { image: '/projects/hologrow/website-17.jpg', title: '首页认知建立', desc: '先说清 Pulse 的产品身份，再展示最终输出、数据来源和四个能力支柱，帮助用户快速形成判断。' },
+      { image: '/projects/hologrow/website-18.jpg', title: '可信结果与场景入口', desc: '展示 sources、处理中间层与最终 memo，并以真实岗位问题将产品能力映射到用户日常决策。' },
+      { image: '/projects/hologrow/website-19.jpg', title: 'Vibecoding 落地方法', desc: '从拆解意图、观察真实页面到最终取舍，让 AI 提升实现速度，但把设计判断保留在设计师手中。' },
+      { image: '/projects/hologrow/website-20.jpg', title: '项目复盘', desc: '沉淀产品表达、结构判断、可信设计与 AI 协作四项方法，让官网帮助用户更快完成理解和决策。' }
+    ]
+  },
   // 1. HI链接解析
   {
     id: 'hi-link',
@@ -274,8 +329,8 @@ const PROJECT_DATA = [
     tags: ['界面强关联', '实时沙箱渲染', '风险控制'],
     theme: THEME.cyan,
     btnTheme: 'cyan',
-    coverImage: 'https://i.ibb.co/QvJgsncJ/Frame-50.png',
-    detailHeroImage: 'https://i.ibb.co/LzcFjcqh/1.png',
+    coverImage: '/projects/hi/hi-link-cover.png',
+    detailHeroImage: '/projects/hi/hi-link-cover.png',
     overview: '在复杂的即时通讯场景中，帮助开发者与业务方更安全、清晰、高效地触达关键信息。覆盖了沉浸式预览、视觉风险控制与全链路审批体验的状态优化。',
     details: [
       { title: '体验确定性', desc: '沉浸式预览区的确定性体验优化，消除开发者对离线配置的不确定感，实现所见即所得。' },
