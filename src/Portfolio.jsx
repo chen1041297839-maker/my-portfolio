@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { PROJECT_DATA } from './App.jsx'
+import AIChatWidget from './AIChatWidget.jsx'
 
 const FILTERS = ['All', 'UX/UI & Web', 'Game Design', 'Digital Media', 'Spatial Design']
 const FEATURED_IDS = ['hologrow-webapp', 'hologrow-website', 'hi-link']
@@ -180,7 +181,7 @@ export default function Portfolio() {
   const featured = FEATURED_IDS.map(id => PROJECT_DATA.find(x => x.id === id)).filter(Boolean)
   const copy = async () => { try { await navigator.clipboard.writeText('xinyuchen1124@163.com'); setCopied(true); setTimeout(() => setCopied(false), 1600) } catch { window.location.href = 'mailto:xinyuchen1124@163.com' } }
 
-  if (active) return <><ProjectDetail project={active} close={() => setActive(null)} zoom={setZoom}/>{zoom && <div className="lightbox" onClick={() => setZoom(null)}><button aria-label="关闭大图">×</button><img src={zoom} alt="项目大图"/></div>}</>
+  if (active) return <><ProjectDetail project={active} close={() => setActive(null)} zoom={setZoom}/>{zoom && <div className="lightbox" onClick={() => setZoom(null)}><button aria-label="关闭大图">×</button><img src={zoom} alt="项目大图"/></div>}<AIChatWidget/></>
 
   return <div className="portfolio">
     <nav className="nav shell" aria-label="主导航">
@@ -206,5 +207,6 @@ export default function Portfolio() {
       </section>
       <section className="contact shell" id="contact"><p>下一段体验，<br/>也许可以一起设计。</p><button onClick={copy}>{copied ? '邮箱已复制' : '和我聊聊'}<Arrow/></button><footer><b>xinyuchen1124@163.com</b><span>© 2026 XINYU CHEN</span></footer></section>
     </main>
+    <AIChatWidget/>
   </div>
 }
