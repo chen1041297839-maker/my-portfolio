@@ -1,6 +1,6 @@
 # 作品集网站改版交接文档
 
-> 写给完全没有历史上下文的新对话。请先完整阅读本文，再修改代码。
+> 写给完全没有历史上下文的新对话。请先完整阅读本文和 `CONVERSATION_ARCHIVE.md`，再修改代码。
 > 最后更新：2026-07-22
 > 本地目录：`/Users/Admin/my-portfolio-main`
 > GitHub：`chen1041297839-maker/my-portfolio`
@@ -343,4 +343,4 @@ npm run build
 
 新对话接手时，不要直接说“我会全面优化”。应该先向用户确认：
 
-> 我已经读完 `HANDOFF.md`、`PRODUCT.md` 和 `DESIGN.md`。当前方向不需要重做；我会先修复 Hi 链接解析配置段的重复文案，然后按 Hologrow WebApp、Hologrow 官网、Hi 链接解析、待办薯、包的 AI 的顺序做浏览器验收。不会删除原图、项目数据、Figma Frame 或 Gemini 代码，也不会把改动提交到 main。
+> 我已经读完 `HANDOFF.md`、`PRODUCT.md`、`DESIGN.md` 和 `CONVERSATION_ARCHIVE.md`。当前方向不需要重做；我会先核对交接文档中的未完成项，再按 Hologrow WebApp、Hologrow 官网、Hi 链接解析、待办薯、包的 AI 的顺序做浏览器验收。不会删除原图、项目数据、Figma Frame 或 Gemini 代码，也不会把改动提交到 main。
