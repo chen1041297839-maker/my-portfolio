@@ -447,13 +447,13 @@ export default function Portfolio() {
           {archiveOpen && <div id="archive-projects" className="archive-content"><div className="filters" role="group" aria-label="项目档案分类">{FILTERS.map(x => <button className={filter === x ? 'active' : ''} aria-pressed={filter === x} key={x} onClick={() => setFilter(x)}>{x === 'All' ? '全部档案' : x}</button>)}</div>{archiveProjects.length ? <div className="project-index-list">{archiveProjects.map((project, index) => <ProjectRow key={project.id} project={project} index={index} onOpen={openProject}/>)}</div> : <p className="archive-empty">该分类暂无未展示项目。</p>}</div>}
         </section>
       </section>
-      <section className="about shell" id="about">
-        <div className="about-statement"><p>为什么这些项目会同时出现</p><h2>我换过媒介，<br/>没换过问题。</h2><blockquote>人怎样读懂一个系统，<br/>又怎样被它触动？</blockquote></div>
-        <div className="practice-path"><article><b>空间与叙事</b><p>最早我从声音、动线和场景开始理解体验——屏幕之外，人仍然在读信息。</p></article><article><b>交互与系统</b><p>后来进入 B 端与 AI 产品：面对角色、状态和例外，设计必须让下一步清楚。</p></article><article><b>实时与跨媒介</b><p>游戏引擎、传感器和创意编程，让反馈不只被看见，也能被听见和触发。</p></article></div>
-      </section>
       <section className="experience shell" id="experience">
         <header><p>这些判断在哪里变成真实产品</p><h2>设计要在约束里成立，<br/>也要在交付后继续成立。</h2></header>
         <div className="experience-list"><article><time>2026.05 — NOW</time><div><h3>虹影生长 Hologrow</h3><p>UI/UX 设计师</p></div><p>负责主营 WebApp 与品牌官网的全链路 UI/UX，建立面向 AI 产品的体验规则与组件体系；以 Vibecoding 推进设计到前端落地，并延展品牌 VI 与多媒体资产。</p></article><article><time>2025.09 — 2026.05</time><div><h3>小红书 RED</h3><p>B 端体验设计实习生</p></div><p>参与自研协作产品 Hi 的全链路设计，覆盖 Dark Mode、设计系统、AI 复杂交互与审批体验；在业务判断、体验策略和研发落地之间建立连接。</p></article></div>
+      </section>
+      <section className="about shell" id="about">
+        <div className="about-statement"><p>为什么这些项目会同时出现</p><h2>我换过媒介，<br/>没换过问题。</h2><blockquote>人怎样读懂一个系统，<br/>又怎样被它触动？</blockquote></div>
+        <div className="practice-path"><article><b>空间与叙事</b><p>最早我从声音、动线和场景开始理解体验——屏幕之外，人仍然在读信息。</p></article><article><b>交互与系统</b><p>后来进入 B 端与 AI 产品：面对角色、状态和例外，设计必须让下一步清楚。</p></article><article><b>实时与跨媒介</b><p>游戏引擎、传感器和创意编程，让反馈不只被看见，也能被听见和触发。</p></article></div>
       </section>
       <section className="contact shell" id="contact"><p>如果你也在整理一个复杂问题，<br/>我们可以从具体处聊起。</p><button onClick={copy}>{copied ? '邮箱已复制' : '聊一个具体问题'}<Arrow/></button><footer><b>xinyuchen1124@163.com</b><span>© 2026 XINYU CHEN</span></footer></section>
     </main>
