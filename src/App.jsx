@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components, no-unused-vars, no-empty, no-useless-escape */
 import React, { useState, useEffect } from 'react';
 
 // --- 3D 液态毛玻璃卡片组件 ---
@@ -264,7 +265,59 @@ const BTN_THEMES = {
   }
 };
 
-const PROJECT_DATA = [
+export const PROJECT_DATA = [
+  {
+    id: 'hologrow-webapp',
+    category: 'UX/UI & Web',
+    title: 'Hologrow WebApp',
+    subtitle: '把快速生成的 AI 数据产品，整理成可持续迭代的 B 端体验系统',
+    tags: ['B2B SaaS', 'AI 交互', '设计系统'],
+    theme: THEME.green,
+    btnTheme: 'green',
+    coverImage: '/projects/hologrow/webapp-cover.png',
+    detailHeroImage: '/projects/hologrow/webapp-cover.png',
+    overview: '入职虹影生长后，我独立负责主营 WebApp 的体验升级。项目并非简单改版，而是从产品结构、核心流程、AI 过程表达和组件规范四个层面，建立一套让用户能稳定使用、团队能持续迭代的体验系统。',
+    details: [
+      { title: '从页面优化到产品结构', desc: '按真实使用频率分阶段推进：先重构首页与对话入口，再补齐 onboarding、usage、integrations 与团队管理，最后为持续增加的 AI 能力建立可扩展入口。' },
+      { title: '让 AI 过程可见、结果可信', desc: '补全 thinking、tool calling 与结构化输出状态，将来源、处理过程与结论组织为可理解的阅读路径，降低等待焦虑并增强用户对结果的信任。' },
+      { title: '重塑基础管理体验', desc: '重构 Integrations、Usage 与 Team Management，把深层路径压缩为更短的任务闭环，并通过数据层级、状态与键盘交互提升专业用户效率。' },
+      { title: '建立可持续的体验规则', desc: '统一信息容器、操作反馈、状态表达和 AI 对话规范，使后续能力不必从零设计，也帮助产品、设计与研发使用同一套规则协作。' }
+    ],
+    gallery: [
+      { image: '/projects/hologrow/webapp-cover.png', title: 'WebApp 全面升级迭代', desc: '把快速生成的 AI 数据产品，整理成可持续迭代的 B 端体验系统。' },
+      { image: '/projects/hologrow/webapp-ai-flow.png', title: 'AI 回答过程可视化', desc: '补全推理状态、工具调用与结构化输出，让等待有反馈、过程可见、内容可复用。' },
+      { image: '/projects/hologrow/webapp-integrations.png', title: 'Integrations 连接管理重构', desc: '重新组织平台、连接状态与授权动作，让用户更快定位问题。' },
+      { image: '/projects/hologrow/webapp-usage.png', title: 'Usage 用量与趋势', desc: '从总量、趋势进入成员明细，帮助管理员判断变化发生在哪里。' },
+      { image: '/projects/hologrow/webapp-team.png', title: 'Team Management 团队与邀请', desc: '将成员、邀请和状态收进同一套管理规则。' },
+      { image: '/projects/hologrow/webapp-objects.png', title: '结果、会话、任务与能力管理', desc: '把持续增长的 AI 能力拆分为可管理对象，支持结果分享、会话回看、长期任务与插件能力管理。' },
+      { image: '/projects/hologrow/webapp-system.png', title: '体验组件与状态规范', desc: '沉淀卡片、详情面板、弹窗、输入、筛选、状态以及 AI 对话组件，为后续迭代提供一致基础。' }
+    ]
+  },
+  {
+    id: 'hologrow-website',
+    category: 'UX/UI & Web',
+    title: 'Hologrow 官网',
+    subtitle: '让 AI 产品价值从“技术能力”转化为用户能理解的增长答案',
+    tags: ['品牌叙事', 'Vibecoding', 'AI 产品'],
+    theme: THEME.green,
+    btnTheme: 'green',
+    coverImage: '/projects/hologrow/website-14.jpg',
+    detailHeroImage: '/projects/hologrow/website-14.jpg',
+    liveSiteUrl: 'https://hologrow.ai/',
+    overview: '我负责 Hologrow 官网的信息架构、产品叙事、UI 视觉与 Vibecoding 前端落地。核心挑战不是让页面显得更科技，而是帮助用户按正确顺序理解 Pulse 是什么、结果为什么可信，以及它与自己的工作有什么关系。',
+    details: [
+      { title: '从能力陈列转向用户判断', desc: '将官网目标从展示“我们有什么能力”，改写为帮助用户依次判断：产品是什么、是否可信、与我有什么关系、下一步做什么。' },
+      { title: '重组产品叙事路径', desc: '按产品身份、最终输出、结果可信、工作方式、差异价值与使用场景组织信息，让每一屏都回答一个关键问题。' },
+      { title: '把可信度设计出来', desc: '通过 analyst memo、数据来源、处理逻辑、confidence 与真实业务场景，展示从数据接入到分析结果的完整关系。' },
+      { title: '用 Vibecoding 推进真实落地', desc: '使用 AI 辅助开发工具将设计意图直接推进到真实网页，在浏览器里持续判断清晰度、动效、模块层次与移动端适配，并做必要取舍。' }
+    ],
+    gallery: [
+      { image: '/projects/hologrow/website-15.jpg', title: '重新定义官网需要解决的问题', desc: '从旧版信息集中、产品视角强和认知成本高的问题出发，将目标明确为建立用户的第一轮产品理解。' },
+      { image: '/projects/hologrow/website-story-path.png', title: '六段式产品叙事路径', desc: '以产品身份、产品输出、结果可信、工作方式、差异价值和使用场景逐层增加用户理解。' },
+      { image: '/projects/hologrow/website-design-decisions.png', title: '首页产品身份与价值建立', desc: '先说清 Pulse 的产品身份，再展示最终输出、数据来源和四个能力支柱。' },
+      { image: '/projects/hologrow/website-trust-scenarios.png', title: '让结果有来源，让场景能对号入座', desc: '展示 sources、处理中间层与最终 memo，并以真实岗位问题将产品能力映射到用户日常决策。' }
+    ]
+  },
   // 1. HI链接解析
   {
     id: 'hi-link',
@@ -273,9 +326,9 @@ const PROJECT_DATA = [
     subtitle: 'IM 场景下的高效信息触达解决方案',
     tags: ['界面强关联', '实时沙箱渲染', '风险控制'],
     theme: THEME.cyan,
-    btnTheme: 'cyan',
-    coverImage: 'https://i.ibb.co/QvJgsncJ/Frame-50.png',
-    detailHeroImage: 'https://i.ibb.co/LzcFjcqh/1.png',
+    btnTheme: 'blue',
+    coverImage: '/projects/hi/hi-link-cover.png',
+    detailHeroImage: '/projects/hi/hi-link-cover.png',
     overview: '在复杂的即时通讯场景中，帮助开发者与业务方更安全、清晰、高效地触达关键信息。覆盖了沉浸式预览、视觉风险控制与全链路审批体验的状态优化。',
     details: [
       { title: '体验确定性', desc: '沉浸式预览区的确定性体验优化，消除开发者对离线配置的不确定感，实现所见即所得。' },
@@ -297,15 +350,15 @@ const PROJECT_DATA = [
         image: 'https://i.ibb.co/2YghgnPx/7-1.png', 
         prototypeUrl: 'https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FQxhJdQlLFarJUInYHoEZ7b%2Fxhs%25E5%25AE%259E%25E4%25B9%25A0%25E9%25A1%25B9%25E7%259B%25AE%3Fnode-id%3D0-1%26p%3Df%26t%3DPIg7PqiPma1Ifu30-0%26scaling%3Dscale-down-width%26content-scaling%3Dfixed%26starting-point-node-id%3D1%253A327839&hide-ui=1',
         prototypeAspectRatio: '1920/1549.33',
-        title: '开放平台强管理视觉引导', 
-        desc: '在复杂的开放平台后台，通过重构信息层级与视觉动线，强化了关键操作的引导。采用更具指向性的色彩与组件规范，降低了开发者的学习门槛，确保高频管理动作的准确性与高效性。' 
+        title: 'URL 规则配置',
+        desc: '在链接解析能力配置页中，管理员可以新增 URL 匹配规则、选择解析样式并配置回调。交互画板保留了从新增规则到完成基础配置的真实操作路径。'
       },
       { 
         image: 'https://i.ibb.co/PZLtR2qJ/21-4.png', 
         prototypeUrl: 'https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FQxhJdQlLFarJUInYHoEZ7b%2Fxhs%25E5%25AE%259E%25E4%25B9%25A0%25E9%25A1%25B9%25E7%259B%25AE%3Fnode-id%3D0-1%26p%3Df%26t%3DPIg7PqiPma1Ifu30-0%26scaling%3Dscale-down-width%26content-scaling%3Dfixed%26starting-point-node-id%3D103%253A56731%26show-proto-sidebar%3D1&hide-ui=1',
         prototypeAspectRatio: '1920/2670.67', 
-        title: '沉浸式预览区', 
-        desc: '创新性地引入了“所见即所得”的沙箱渲染机制。用户在左侧进行链接解析的参数配置时，右侧可秒级呈现真实的 IM 气泡效果。这种强关联的沉浸式体验彻底消除了离线调试的盲目感。' 
+        title: '沙箱验证区',
+        desc: '配置完成后，用户沿页面向下进入沙箱，输入待验证链接并查看真实 IM 气泡。配置与结果位于同一条纵向浏览路径中，减少跨页调试和反复保存。'
       },
       { 
         image: 'https://i.ibb.co/k2yk21b2/20-1.png', 
@@ -320,7 +373,7 @@ const PROJECT_DATA = [
         prototypeAspectRatio: '960/812', 
         isMobilePrototype: true,
         title: '移动端审批', 
-        desc: '为满足移动办公与碎片化时间的审批诉求，将复杂的 PC 端信息进行适屏降噪。保留核心审批字段与警示状态，配合流畅的底部操作区，让管理者在手机上也能随时随地安全、便捷地完成审批闭环。' 
+        desc: '针对移动审批的单手操作场景，将桌面端并行的决策按钮改为上下排列，并放入底部拇指热区。主次操作形成稳定层级，降低窄屏误触风险。'
       }
     ]
   },
@@ -332,7 +385,7 @@ const PROJECT_DATA = [
     subtitle: 'IM场景下的智能协作效率助手',
     tags: ['Thinking动效', '模块化配置', '上下文记忆'],
     theme: THEME.purple,
-    btnTheme: 'purple',
+    btnTheme: 'blue',
     coverImage: 'https://i.ibb.co/ksW4BhDH/Frame-51.png',
     detailHeroImage: 'https://i.ibb.co/V034xxZG/15-1.png',
     overview: '探索大语言模型在 B 端工作流中的无缝融入，降低员工的使用门槛，提升协同效率。包含拟人化状态响应与上下文连贯性设计。',
@@ -404,7 +457,7 @@ const PROJECT_DATA = [
     subtitle: '让图像创作更轻松，更愉快的被分享',
     tags: ['视觉重塑', '一键做同款', '增长留存'],
     theme: THEME.blue,
-    btnTheme: 'blue',
+    btnTheme: 'purple',
     coverImage: 'https://i.ibb.co/KcWNvTYW/Frame-52.png',
     detailHeroImage: 'https://i.ibb.co/3YcsYmWt/1.png',
     overview: '一款面向 C 端年轻用户的 AI 图像创作应用，旨在打造极简的生成流程与高转化的社交分享闭环。',

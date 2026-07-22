@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-18T00:00:00+08:00",
+  "title": "Design System: Xinyu Chen Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "spatial-black": { "role": "neutral", "displayName": "空间黑", "canonical": "#0C0B10", "tonalRamp": ["oklch(15% 0.012 305)", "oklch(25% 0.012 305)", "oklch(35% 0.012 305)", "oklch(48% 0.012 305)", "oklch(62% 0.012 305)", "oklch(74% 0.012 305)", "oklch(86% 0.012 305)", "oklch(95% 0.012 305)"] },
+      "cold-white": { "role": "neutral", "displayName": "冷白", "canonical": "#F4F0F7", "tonalRamp": ["oklch(15% 0.008 305)", "oklch(25% 0.008 305)", "oklch(35% 0.008 305)", "oklch(48% 0.008 305)", "oklch(62% 0.008 305)", "oklch(74% 0.008 305)", "oklch(86% 0.008 305)", "oklch(95% 0.008 305)"] },
+      "perception-violet": { "role": "primary", "displayName": "感知紫", "canonical": "#875CFF", "tonalRamp": ["oklch(15% 0.18 295)", "oklch(25% 0.18 295)", "oklch(35% 0.18 295)", "oklch(48% 0.18 295)", "oklch(62% 0.18 295)", "oklch(74% 0.18 295)", "oklch(86% 0.18 295)", "oklch(95% 0.18 295)"] },
+      "signal-orange": { "role": "secondary", "displayName": "信号橙", "canonical": "#FF6433", "tonalRamp": ["oklch(15% 0.17 38)", "oklch(25% 0.17 38)", "oklch(35% 0.17 38)", "oklch(48% 0.17 38)", "oklch(62% 0.17 38)", "oklch(74% 0.17 38)", "oklch(86% 0.17 38)", "oklch(95% 0.17 38)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "首屏宣言和极少数章节转折。" },
+      "headline": { "displayName": "Headline", "purpose": "项目章节与能力主张。" },
+      "body": { "displayName": "Body", "purpose": "案例叙事与解释性内容。" },
+      "label": { "displayName": "Label", "purpose": "短状态、平台和真实元数据。" }
+    },
+    "shadows": [
+      { "name": "focus-microglow", "value": "0 4px 8px rgba(135,92,255,0.22)", "purpose": "焦点与悬停的短暂状态，不作为默认卡片皮肤。" }
+    ],
+    "motion": [
+      { "name": "ease-focus", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "项目聚焦、共享元素展开与状态过渡。" },
+      { "name": "duration-state", "value": "220ms", "purpose": "按钮、筛选与键盘焦点反馈。" },
+      { "name": "duration-scene", "value": "700ms", "purpose": "项目视觉气候和页面场景转场。" }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "600px" },
+      { "name": "compact", "value": "900px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Contact",
+      "kind": "button",
+      "refersTo": "button-contact",
+      "description": "全站唯一高能行动按钮，用于联系或面试邀请。",
+      "html": "<button class=\"ds-contact\">LET’S TALK</button>",
+      "css": ".ds-contact{background:#FF6433;color:#0C0B10;border:0;border-radius:999px;padding:10px 16px;font:600 11px Archivo,sans-serif;transition:transform 220ms cubic-bezier(.22,1,.36,1),filter 220ms}.ds-contact:hover{transform:translateY(-2px);filter:brightness(1.05)}.ds-contact:focus-visible{outline:2px solid #F4F0F7;outline-offset:3px}"
+    },
+    {
+      "name": "Selected Filter",
+      "kind": "chip",
+      "refersTo": "filter-selected",
+      "description": "项目分类的选中状态，颜色与文本共同表达。",
+      "html": "<button class=\"ds-filter\" aria-pressed=\"true\">AI PRODUCTS</button>",
+      "css": ".ds-filter{background:#875CFF;color:#F4F0F7;border:0;border-radius:999px;padding:8px 13px;font:500 11px Archivo,sans-serif}.ds-filter:focus-visible{outline:2px solid #FF6433;outline-offset:3px}"
+    },
+    {
+      "name": "Ghost Action",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "用于返回、查看详情与次级操作。",
+      "html": "<button class=\"ds-ghost\">VIEW PROJECT →</button>",
+      "css": ".ds-ghost{background:#0C0B10;color:#F4F0F7;border:1px solid #302B36;border-radius:999px;padding:10px 16px;font:500 11px Archivo,sans-serif;transition:border-color 220ms,color 220ms}.ds-ghost:hover{border-color:#875CFF}.ds-ghost:focus-visible{outline:2px solid #FF6433;outline-offset:3px}"
+    },
+    {
+      "name": "Project Surface",
+      "kind": "card",
+      "refersTo": "project-surface",
+      "description": "仅用于项目真正需要独立空间层时，不是默认卡片皮肤。",
+      "html": "<article class=\"ds-project\"><strong>Hologrow WebApp</strong><span>AI Product · B2B SaaS</span></article>",
+      "css": ".ds-project{display:grid;gap:12px;background:#111016;color:#F4F0F7;border-radius:14px;padding:24px;font-family:Archivo,sans-serif}.ds-project strong{font-size:24px}.ds-project span{color:#AAA4B0;font-size:11px}.ds-project:focus-within{outline:2px solid #875CFF;outline-offset:3px}"
+    },
+    {
+      "name": "Floating Navigation",
+      "kind": "nav",
+      "description": "滚动后才启用的单层轻玻璃导航。",
+      "html": "<nav class=\"ds-nav\"><strong>XY</strong><a href=\"#work\">WORK</a><a href=\"#contact\">CONTACT</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:28px;background:rgba(12,11,16,.82);color:#F4F0F7;border-radius:14px;padding:12px 16px;backdrop-filter:blur(14px);font:500 11px Archivo,sans-serif}.ds-nav a{color:#AAA4B0;text-decoration:none}.ds-nav a:hover,.ds-nav a:focus-visible{color:#F4F0F7}"
+    }
+  ],
+  "narrative": {
+    "northStar": "感知系统主义 / Perceptual Systemism",
+    "overview": "一个高艺术指导的空间叙事型作品集：系统结构、状态与可信度提供骨架；光、时间、空间与项目专属材质提供感知层。当前首页构图不是最终身份，下一轮需要重新设计画面、节奏和共享元素转场。",
+    "keyCharacteristics": ["真实项目画面主导", "商业精度与跨媒介气候并存", "不对称但可读", "动效表达结构和感知变化", "普通设备保持清晰"],
+    "rules": [
+      { "name": "The Signal Scarcity Rule", "body": "信号橙在任一视口中不超过约 8%，仅用于行动或状态改变。", "section": "colors" },
+      { "name": "The Project Climate Rule", "body": "项目专属颜色只能在对应项目进入焦点或详情页时释放。", "section": "colors" },
+      { "name": "The Solid Type Rule", "body": "所有文字使用实色；渐变文字与低对比正文禁止。", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "所有表面静止时保持平；阴影是状态，不是皮肤。", "section": "elevation" },
+      { "name": "The One Glass Plane Rule", "body": "同一视口最多存在一个明显玻璃层。", "section": "elevation" }
+    ],
+    "dos": ["Do 让真实项目图片占据主要画面。", "Do 用商业项目先证明复杂系统与 AI 产品能力。", "Do 验证键盘、对比度、减少动态模式和移动端。"],
+    "donts": ["Don't 复刻当前网站首页构图。", "Don't 制作普通 SaaS Bento 首页或统一玻璃卡片墙。", "Don't 使用渐变文字、终端美学或无意义编号。", "Don't 让所有项目共享相同卡片和视觉气候。"]
+  }
+}
